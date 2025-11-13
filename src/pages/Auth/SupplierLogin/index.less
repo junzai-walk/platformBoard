@@ -1,0 +1,128 @@
+.login-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+
+  &.supplier-login {
+    background: linear-gradient(135deg, #ff6600 0%, #ff9966 100%);
+  }
+
+  .login-container {
+    display: flex;
+    max-width: 1000px;
+    width: 100%;
+    background: #fff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+    .login-left {
+      flex: 1;
+      background: linear-gradient(135deg, #ff6600 0%, #ff9966 100%);
+      padding: 60px 40px;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .login-banner {
+        text-align: center;
+
+        h2 {
+          font-size: 32px;
+          font-weight: 600;
+          margin-bottom: 16px;
+          color: #fff;
+        }
+
+        p {
+          font-size: 16px;
+          margin-bottom: 32px;
+          opacity: 0.9;
+        }
+
+        img {
+          max-width: 100%;
+          height: auto;
+        }
+      }
+    }
+
+    .login-right {
+      flex: 1;
+      padding: 60px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .login-form-wrapper {
+        width: 100%;
+        max-width: 400px;
+
+        h1 {
+          font-size: 28px;
+          font-weight: 600;
+          margin-bottom: 32px;
+          text-align: center;
+        }
+
+        .form-actions {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+
+          .forgot-link {
+            color: #ff6600;
+          }
+        }
+
+        .third-party-login {
+          display: flex;
+          justify-content: center;
+          gap: 16px;
+          margin-bottom: 24px;
+        }
+
+        .register-link {
+          text-align: center;
+          color: #666;
+
+          a {
+            color: #ff6600;
+            font-weight: 500;
+          }
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .login-page {
+    .login-container {
+      flex-direction: column;
+
+      .login-left {
+        padding: 40px 20px;
+
+        .login-banner {
+          h2 {
+            font-size: 24px;
+          }
+
+          img {
+            display: none;
+          }
+        }
+      }
+
+      .login-right {
+        padding: 40px 20px;
+      }
+    }
+  }
+}
+

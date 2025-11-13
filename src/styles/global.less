@@ -1,0 +1,313 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB',
+    'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: #f7f8fa;
+  color: #333;
+  line-height: 1.6;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+#root {
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+// 主题色定义 - 优化配色方案
+@primary-color: #ff6600;
+@primary-light: #ff8533;
+@primary-lighter: #ffb380;
+@primary-dark: #cc5200;
+
+@secondary-color: #1890ff;
+@secondary-light: #40a9ff;
+
+@success-color: #52c41a;
+@warning-color: #faad14;
+@error-color: #f5222d;
+
+@text-color: #1a1a1a;
+@text-secondary: #666666;
+@text-tertiary: #999999;
+
+@border-color: #e8e8e8;
+@border-light: #f0f0f0;
+
+@bg-color: #ffffff;
+@bg-gray: #f7f8fa;
+@bg-light: #fafafa;
+
+// 阴影定义
+@shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+@shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+@shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+@shadow-hover: 0 6px 20px rgba(255, 102, 0, 0.15);
+
+// 间距系统 (8px grid)
+@spacing-xs: 8px;
+@spacing-sm: 16px;
+@spacing-md: 24px;
+@spacing-lg: 32px;
+@spacing-xl: 48px;
+@spacing-xxl: 64px;
+
+// 通用容器
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 @spacing-md;
+}
+
+.wide-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 @spacing-md;
+}
+
+.full-container {
+  width: 100%;
+  padding: 0 @spacing-md;
+}
+
+// 通用按钮样式
+.btn-primary {
+  background-color: @primary-color;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: darken(@primary-color, 10%);
+  }
+}
+
+.btn-secondary {
+  background-color: @secondary-color;
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s;
+
+  &:hover {
+    background-color: darken(@secondary-color, 10%);
+  }
+}
+
+// 卡片样式 - 优化设计
+.card {
+  background: @bg-color;
+  border-radius: 12px;
+  padding: @spacing-md;
+  box-shadow: @shadow-sm;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid @border-light;
+
+  &:hover {
+    box-shadow: @shadow-md;
+    transform: translateY(-2px);
+  }
+}
+
+.card-hover {
+  background: @bg-color;
+  border-radius: 12px;
+  padding: @spacing-md;
+  box-shadow: @shadow-sm;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  border: 1px solid @border-light;
+
+  &:hover {
+    box-shadow: @shadow-hover;
+    transform: translateY(-4px);
+    border-color: @primary-light;
+  }
+}
+
+// 页面标题
+.page-title {
+  font-size: 24px;
+  font-weight: 600;
+  color: @text-color;
+  margin-bottom: 24px;
+}
+
+// 分割线
+.divider {
+  height: 1px;
+  background-color: @border-color;
+  margin: 20px 0;
+}
+
+// 渐变背景
+.gradient-primary {
+  background: linear-gradient(135deg, @primary-color 0%, @primary-light 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, @secondary-color 0%, @secondary-light 100%);
+}
+
+// 文字渐变
+.text-gradient {
+  background: linear-gradient(135deg, @primary-color 0%, @primary-light 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+// 徽章样式
+.badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.badge-primary {
+    background: rgba(255, 102, 0, 0.1);
+    color: @primary-color;
+  }
+
+  &.badge-success {
+    background: rgba(82, 196, 26, 0.1);
+    color: @success-color;
+  }
+
+  &.badge-warning {
+    background: rgba(250, 173, 20, 0.1);
+    color: @warning-color;
+  }
+}
+
+// 标签样式
+.tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  background: @bg-light;
+  color: @text-secondary;
+  border: 1px solid @border-color;
+
+  &.tag-primary {
+    background: rgba(255, 102, 0, 0.1);
+    color: @primary-color;
+    border-color: @primary-lighter;
+  }
+}
+
+// 图标容器
+.icon-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: @bg-light;
+  color: @primary-color;
+  font-size: 24px;
+  transition: all 0.3s;
+
+  &:hover {
+    background: rgba(255, 102, 0, 0.1);
+    transform: scale(1.1);
+  }
+}
+
+// 分隔线优化
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, @border-color 50%, transparent 100%);
+  margin: @spacing-xl 0;
+}
+
+// 响应式工具类
+@media (max-width: 768px) {
+  .container,
+  .wide-container {
+    padding: 0 @spacing-sm;
+  }
+
+  .hide-mobile {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hide-desktop {
+    display: none !important;
+  }
+}
+
+// 动画类
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.6s ease-out;
+}
+
+// 延迟动画
+.delay-1 { animation-delay: 0.1s; }
+.delay-2 { animation-delay: 0.2s; }
+.delay-3 { animation-delay: 0.3s; }
+.delay-4 { animation-delay: 0.4s; }
+

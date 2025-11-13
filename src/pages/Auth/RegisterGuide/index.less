@@ -1,0 +1,75 @@
+.register-guide-page {
+  padding: 80px 20px;
+  min-height: calc(100vh - 400px);
+
+  h1 {
+    text-align: center;
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 16px;
+    color: #666;
+  }
+
+  .register-card {
+    text-align: center;
+    padding: 40px 20px;
+    border: 2px solid #e8e8e8;
+    transition: all 0.3s;
+
+    &:hover {
+      border-color: #ff6600;
+      transform: translateY(-8px);
+    }
+
+    .card-icon {
+      font-size: 72px;
+      color: #ff6600;
+      margin-bottom: 24px;
+    }
+
+    h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    p {
+      color: #666;
+      margin-bottom: 24px;
+    }
+
+    ul {
+      text-align: left;
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 8px 0;
+        color: #333;
+
+        &::before {
+          content: '✓';
+          color: #52c41a;
+          font-weight: bold;
+          margin-right: 8px;
+        }
+      }
+    }
+
+    &.distributor-card {
+      .card-icon {
+        color: #1890ff;
+      }
+
+      &:hover {
+        border-color: #1890ff;
+      }
+    }
+  }
+}
+

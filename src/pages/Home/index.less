@@ -1,0 +1,454 @@
+.home-page {
+  // Banner区域
+  .banner-section {
+    background: linear-gradient(180deg, #fff 0%, #f7f8fa 100%);
+    padding: 32px 0;
+
+    .main-carousel {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+      img {
+        width: 100%;
+        height: 420px;
+        object-fit: cover;
+      }
+    }
+
+    .side-panel {
+      background: linear-gradient(135deg, #ff6600 0%, #ff8533 100%);
+      border-radius: 16px;
+      padding: 32px 24px;
+      height: 420px;
+      box-shadow: 0 8px 24px rgba(255, 102, 0, 0.2);
+
+      h3 {
+        margin-bottom: 24px;
+        font-size: 20px;
+        font-weight: 600;
+        color: #fff;
+        text-align: center;
+      }
+
+      .quick-link {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 16px 20px;
+        margin-bottom: 16px;
+        background: rgba(255, 255, 255, 0.2);
+        backdrop-filter: blur(10px);
+        border-radius: 12px;
+        text-align: center;
+        color: #fff;
+        text-decoration: none;
+        font-size: 15px;
+        font-weight: 500;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+
+        &:hover {
+          background: rgba(255, 255, 255, 0.95);
+          color: #ff6600;
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+      }
+    }
+  }
+
+  // 数据统计区域
+  .stats-section {
+    padding: 64px 0;
+    background: #fff;
+
+    .stat-card {
+      text-align: center;
+      padding: 32px 24px;
+      background: #fff;
+      border-radius: 16px;
+      border: 2px solid #f0f0f0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        border-color: #ff6600;
+        transform: translateY(-4px);
+        box-shadow: 0 12px 32px rgba(255, 102, 0, 0.15);
+      }
+
+      .stat-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+      }
+
+      :global(.ant-statistic-title) {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+      }
+
+      :global(.ant-statistic-content) {
+        font-size: 32px;
+      }
+    }
+  }
+
+  // 商品分类区域
+  .category-section {
+    padding: 64px 0;
+    background: #f7f8fa;
+
+    .category-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px 16px;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 2px solid transparent;
+      min-height: 140px;
+      position: relative;
+      overflow: hidden;
+
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, transparent, currentColor, transparent);
+        opacity: 0;
+        transition: opacity 0.3s;
+      }
+
+      &:hover {
+        border-color: currentColor;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+        transform: translateY(-6px);
+
+        &::before {
+          opacity: 1;
+        }
+
+        .category-icon {
+          transform: scale(1.2) rotate(5deg);
+        }
+      }
+
+      .category-icon {
+        font-size: 52px;
+        margin-bottom: 12px;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .category-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 6px;
+      }
+
+      .category-count {
+        font-size: 13px;
+        color: #999;
+        font-weight: 500;
+      }
+    }
+  }
+
+  // 平台优势区域
+  .features-section {
+    background: #fff;
+    padding: 64px 0;
+
+    .feature-card {
+      text-align: center;
+      padding: 32px 16px;
+      transition: all 0.3s;
+
+      &:hover {
+        .icon-wrapper {
+          transform: scale(1.15) rotate(5deg);
+        }
+      }
+
+      .icon-wrapper {
+        width: 72px;
+        height: 72px;
+        font-size: 32px;
+        margin: 0 auto 20px;
+        border-radius: 16px;
+      }
+
+      h3 {
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1a1a1a;
+      }
+
+      p {
+        color: #666;
+        margin: 0;
+        font-size: 13px;
+      }
+    }
+  }
+
+  // 爆品推荐区域
+  .products-section {
+    padding: 64px 0;
+    background: #f7f8fa;
+
+    .product-card {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 2px solid transparent;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        border-color: #ff6600;
+        box-shadow: 0 12px 32px rgba(255, 102, 0, 0.15);
+        transform: translateY(-6px);
+      }
+
+      .product-image-wrapper {
+        position: relative;
+        overflow: hidden;
+        background: #f5f5f5;
+
+        img {
+          width: 100%;
+          height: 240px;
+          object-fit: cover;
+          transition: transform 0.3s;
+        }
+
+        &:hover img {
+          transform: scale(1.08);
+        }
+
+        .product-tags {
+          position: absolute;
+          top: 12px;
+          left: 12px;
+          display: flex;
+          gap: 6px;
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
+
+      .product-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin-bottom: 12px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        line-height: 1.5;
+        min-height: 42px;
+      }
+
+      .product-info {
+        .price {
+          color: #ff6600;
+          font-size: 20px;
+          font-weight: 700;
+          margin-bottom: 12px;
+          font-family: 'Arial', sans-serif;
+        }
+
+        .meta-row {
+          display: flex;
+          justify-content: space-between;
+          margin-bottom: 12px;
+          padding: 8px 12px;
+          background: #f7f8fa;
+          border-radius: 8px;
+
+          .moq,
+          .sales {
+            font-size: 12px;
+            color: #666;
+          }
+        }
+
+        .supplier {
+          font-size: 12px;
+          color: #666;
+          display: flex;
+          align-items: center;
+          padding-top: 8px;
+          border-top: 1px solid #f0f0f0;
+        }
+      }
+    }
+  }
+
+  // 热门供应商区域
+  .suppliers-section {
+    padding: 64px 0;
+    background: #fff;
+
+    .supplier-card {
+      text-align: center;
+      padding: 32px 24px;
+      border-radius: 16px;
+      border: 2px solid #f0f0f0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+      &:hover {
+        border-color: #ff6600;
+        box-shadow: 0 12px 32px rgba(255, 102, 0, 0.15);
+        transform: translateY(-6px);
+      }
+
+      .supplier-header {
+        position: relative;
+        margin-bottom: 16px;
+
+        .certified-badge {
+          position: absolute;
+          bottom: 0;
+          right: calc(50% - 40px);
+          width: 24px;
+          height: 24px;
+          background: #52c41a;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #fff;
+          font-size: 14px;
+          border: 2px solid #fff;
+        }
+      }
+
+      .supplier-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 16px 0 12px;
+        min-height: 44px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+      }
+
+      .supplier-category {
+        margin-bottom: 16px;
+      }
+
+      .supplier-stats {
+        .stat-item {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          margin-bottom: 8px;
+          font-size: 13px;
+          color: #666;
+
+          .rating-value {
+            font-weight: 600;
+            color: #faad14;
+          }
+        }
+      }
+    }
+  }
+
+  // 客户评价区域
+  .testimonials-section {
+    padding: 64px 0;
+    background: linear-gradient(180deg, #f7f8fa 0%, #fff 100%);
+
+    .testimonial-card {
+      padding: 32px;
+      border-radius: 16px;
+      border: 2px solid #f0f0f0;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      height: 100%;
+
+      &:hover {
+        border-color: #1890ff;
+        box-shadow: 0 12px 32px rgba(24, 144, 255, 0.15);
+        transform: translateY(-4px);
+      }
+
+      .testimonial-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+
+        .testimonial-info {
+          flex: 1;
+          text-align: left;
+
+          h4 {
+            font-size: 15px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin: 0 0 4px;
+          }
+
+          p {
+            font-size: 12px;
+            color: #999;
+            margin: 0;
+          }
+        }
+      }
+
+      .testimonial-content {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.8;
+        margin: 0;
+        font-style: italic;
+      }
+    }
+  }
+
+  // 统一的section标题样式
+  .section-title {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 48px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    &::after {
+      content: '';
+      display: block;
+      width: 80px;
+      height: 4px;
+      background: linear-gradient(90deg, #ff6600, #ff8533);
+      margin: 16px auto 0;
+      border-radius: 2px;
+      position: absolute;
+      bottom: -16px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    position: relative;
+    padding-bottom: 16px;
+  }
+}
+
