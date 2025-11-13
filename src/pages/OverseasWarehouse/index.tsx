@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Row, Col, Card, Statistic } from 'antd'
-import { GlobalOutlined, HomeOutlined, RocketOutlined, ClockCircleOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts'
@@ -113,9 +112,9 @@ const OverseasWarehouse = () => {
           return `
             <div style="padding: 8px;">
               <strong style="font-size: 14px; color: #ff6600;">${t(warehouse.nameKey)}</strong><br/>
-              <span style="color: #666;">📍 ${t(warehouse.locationKey)}</span><br/>
-              <span style="color: #666;">📦 ${t('warehouse.area')}: ${warehouse.area}</span><br/>
-              <span style="color: #666;">📊 ${t('warehouse.dailyOrdersBadge')}: ${warehouse.dailyOrders}</span>
+              <span style="color: #666;">${t(warehouse.locationKey)}</span><br/>
+              <span style="color: #666;">${t('warehouse.area')}: ${warehouse.area}</span><br/>
+              <span style="color: #666;">${t('warehouse.dailyOrdersBadge')}: ${warehouse.dailyOrders}</span>
             </div>
           `
         }
@@ -200,7 +199,6 @@ const OverseasWarehouse = () => {
                 <Statistic
                   title={t('warehouse.countriesCovered')}
                   value={6}
-                  prefix={<GlobalOutlined />}
                   valueStyle={{ color: '#ff6600' }}
                 />
               </Card>
@@ -211,7 +209,6 @@ const OverseasWarehouse = () => {
                   title={t('warehouse.totalArea')}
                   value="610,000"
                   suffix="sq ft"
-                  prefix={<HomeOutlined />}
                   valueStyle={{ color: '#52c41a' }}
                 />
               </Card>
@@ -222,7 +219,6 @@ const OverseasWarehouse = () => {
                   title={t('warehouse.dailyOrders')}
                   value="10,600"
                   suffix="+"
-                  prefix={<RocketOutlined />}
                   valueStyle={{ color: '#1890ff' }}
                 />
               </Card>
@@ -233,7 +229,6 @@ const OverseasWarehouse = () => {
                   title={t('warehouse.avgDelivery')}
                   value="3-5"
                   suffix={t('warehouse.days')}
-                  prefix={<ClockCircleOutlined />}
                   valueStyle={{ color: '#faad14' }}
                 />
               </Card>
@@ -270,16 +265,16 @@ const OverseasWarehouse = () => {
                     title={t(warehouse.nameKey)}
                     description={
                       <div className="warehouse-info">
-                        <p className="location">📍 {t(warehouse.locationKey)}</p>
+                        <p className="location"><strong>Location:</strong> {t(warehouse.locationKey)}</p>
                         <div className="specs">
-                          <span>📦 {warehouse.area}</span>
-                          <span>📊 {warehouse.capacity}</span>
+                          <span><strong>Area:</strong> {warehouse.area}</span>
+                          <span><strong>Capacity:</strong> {warehouse.capacity}</span>
                         </div>
                         <div className="services">
                           <strong>{t('warehouse.services')}:</strong>
                           <ul>
                             {warehouse.serviceKeys.map((serviceKey, idx) => (
-                              <li key={idx}>✓ {t(serviceKey)}</li>
+                              <li key={idx}>{t(serviceKey)}</li>
                             ))}
                           </ul>
                         </div>
