@@ -4,6 +4,8 @@
     "category": "Categories",
     "market": "Marketplace",
     "supplierEntry": "Supplier Entry",
+    "overseasWarehouse": "Overseas Warehouse",
+    "logisticsSolutions": "Logistics Solutions",
     "search": "Search",
     "searchPlaceholder": "Search products, suppliers",
     "cart": "Cart",
@@ -72,6 +74,129 @@
     "totalProducts": "Total Products",
     "products": "Products",
     "noResults": "No categories found"
+  },
+  "warehouse": {
+    "title": "Global Warehouse Network",
+    "subtitle": "Strategic locations worldwide for faster delivery and lower costs",
+    "countriesCovered": "Countries Covered",
+    "totalArea": "Total Warehouse Area",
+    "dailyOrders": "Daily Orders",
+    "avgDelivery": "Avg Delivery Time",
+    "days": "days",
+    "mapTitle": "Global Warehouse Locations",
+    "mapSubtitle": "Click on any warehouse marker to view details",
+    "warehouseDetails": "Warehouse Details",
+    "dailyOrdersBadge": "Daily Orders",
+    "area": "Area",
+    "capacity": "Capacity",
+    "services": "Services",
+    "onboardingTitle": "How to Use Our Warehouses",
+    "step1Title": "Register & Verify",
+    "step1Desc": "Create your supplier account and complete business verification",
+    "step2Title": "Ship to Warehouse",
+    "step2Desc": "Send your products to our designated warehouse address",
+    "step3Title": "Inventory Management",
+    "step3Desc": "Track your inventory in real-time through our dashboard",
+    "step4Title": "Automatic Fulfillment",
+    "step4Desc": "We handle picking, packing, and shipping when orders come in",
+    "warehouses": {
+      "usEast": "US East Coast Warehouse",
+      "usWest": "US West Coast Warehouse",
+      "euGermany": "Europe Central Warehouse",
+      "euUk": "UK Warehouse",
+      "japan": "Japan Warehouse",
+      "australia": "Australia Warehouse"
+    },
+    "locations": {
+      "newJersey": "New Jersey, USA",
+      "losAngeles": "Los Angeles, USA",
+      "hamburg": "Hamburg, Germany",
+      "london": "London, UK",
+      "tokyo": "Tokyo, Japan",
+      "sydney": "Sydney, Australia"
+    },
+    "serviceItems": {
+      "tempControl": "Temperature Control",
+      "largeStorage": "Large Item Storage",
+      "assembly": "Assembly Service",
+      "whiteGlove": "White Glove Delivery",
+      "customs": "EU Customs Clearance",
+      "nextDay": "Next-Day Delivery",
+      "jit": "JIT Delivery",
+      "installation": "Installation Service"
+    }
+  },
+  "logistics": {
+    "title": "Large Item Logistics Solutions",
+    "subtitle": "Making cross-border shipping of furniture, appliances, and equipment as easy as small parcels",
+    "painPointsTitle": "Pain Points & Solutions",
+    "painPointsSubtitle": "We solve the core challenges of large item cross-border trade",
+    "ourSolution": "Our Solution:",
+    "pricingTitle": "Transparent Pricing",
+    "pricingSubtitle": "No hidden fees - know exactly what you'll pay",
+    "costSavingTitle": "💡 Cost-Saving Tips:",
+    "painPoints": {
+      "highCost": "High Shipping Costs",
+      "slowSpeed": "Slow Delivery Speed",
+      "damage": "Damage & Breakage",
+      "installation": "Installation Challenges"
+    },
+    "problems": {
+      "highCost": "Individual shipping of large items results in extremely high freight costs",
+      "slowSpeed": "Cross-border shipping takes 30-60 days, losing competitive advantage",
+      "damage": "Large items are fragile and easily damaged during long-distance transport",
+      "installation": "Customers struggle with assembly of complex furniture and equipment"
+    },
+    "solutions": {
+      "consolidation": "Consolidated Container Shipping",
+      "warehouse": "Pre-positioned Overseas Warehouses",
+      "packaging": "Professional Packaging & Handling",
+      "whiteGlove": "White Glove Delivery Service"
+    },
+    "solutionDetails": {
+      "consolidation1": "Combine multiple orders into full container loads (FCL)",
+      "consolidation2": "Reduce per-unit ocean freight by up to 60%",
+      "consolidation3": "Optimize container space utilization",
+      "consolidation4": "Negotiate better rates with carriers",
+      "warehouse1": "Stock inventory in destination countries",
+      "warehouse2": "Local delivery in 3-5 business days",
+      "warehouse3": "Same-day dispatch for in-stock items",
+      "warehouse4": "Real-time inventory visibility",
+      "packaging1": "Custom packaging for furniture and large items",
+      "packaging2": "Reinforced corner protection and cushioning",
+      "packaging3": "Standardized loading/unloading procedures",
+      "packaging4": "Insurance coverage for high-value items",
+      "whiteGlove1": "Professional installation team available",
+      "whiteGlove2": "Room-of-choice delivery",
+      "whiteGlove3": "Assembly and setup included",
+      "whiteGlove4": "Packaging removal and disposal"
+    },
+    "pricingTable": {
+      "serviceType": "Service Type",
+      "pricingModel": "Pricing Model",
+      "exampleRate": "Example Rate",
+      "notes": "Notes",
+      "oceanFCL": "Ocean Freight (FCL)",
+      "oceanLCL": "Ocean Freight (LCL)",
+      "storage": "Warehouse Storage",
+      "delivery": "Local Delivery",
+      "whiteGlove": "White Glove Service",
+      "perContainer": "Per Container",
+      "perCBM": "Per CBM",
+      "perPallet": "Per Pallet/Month",
+      "perShipment": "Per Shipment",
+      "perItem": "Per Item",
+      "fclNote": "20ft or 40ft container, port-to-port",
+      "lclNote": "Less than container load",
+      "storageNote": "First 90 days free for active sellers",
+      "deliveryNote": "Based on distance and item size",
+      "whiteGloveNote": "Includes assembly and installation"
+    },
+    "costSavingTips": {
+      "tip1": "Combine multiple orders to fill a full container and save up to 60% on freight",
+      "tip2": "Use our overseas warehouses to avoid rush shipping fees",
+      "tip3": "Plan ahead - sea freight is 5-10x cheaper than air freight",
+      "tip4": "Optimize packaging to reduce dimensional weight charges"
+    }
   }
 }
-

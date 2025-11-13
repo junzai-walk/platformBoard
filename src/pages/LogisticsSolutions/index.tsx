@@ -1,63 +1,63 @@
-import { Row, Col, Card, Collapse, Table } from 'antd'
+import { Row, Col, Card, Table } from 'antd'
 import { CheckCircleOutlined, DollarOutlined, RocketOutlined, SafetyOutlined, ToolOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import './index.less'
 
-const { Panel } = Collapse
-
 const LogisticsSolutions = () => {
+  const { t } = useTranslation()
   // 痛点与解决方案
   const solutions = [
     {
       icon: <DollarOutlined />,
-      painPoint: 'High Shipping Costs',
-      problem: 'Individual shipping of large items results in extremely high freight costs',
-      solution: 'Consolidated Container Shipping',
-      details: [
-        'Combine multiple orders into full container loads (FCL)',
-        'Reduce per-unit ocean freight by up to 60%',
-        'Optimize container space utilization',
-        'Negotiate better rates with carriers',
+      painPointKey: 'logistics.painPoints.highCost',
+      problemKey: 'logistics.problems.highCost',
+      solutionKey: 'logistics.solutions.consolidation',
+      detailKeys: [
+        'logistics.solutionDetails.consolidation1',
+        'logistics.solutionDetails.consolidation2',
+        'logistics.solutionDetails.consolidation3',
+        'logistics.solutionDetails.consolidation4',
       ],
       color: '#ff6600',
     },
     {
       icon: <RocketOutlined />,
-      painPoint: 'Slow Delivery Speed',
-      problem: 'Cross-border shipping takes 30-60 days, losing competitive advantage',
-      solution: 'Pre-positioned Overseas Warehouses',
-      details: [
-        'Stock inventory in destination countries',
-        'Local delivery in 3-5 business days',
-        'Same-day dispatch for in-stock items',
-        'Real-time inventory visibility',
+      painPointKey: 'logistics.painPoints.slowSpeed',
+      problemKey: 'logistics.problems.slowSpeed',
+      solutionKey: 'logistics.solutions.warehouse',
+      detailKeys: [
+        'logistics.solutionDetails.warehouse1',
+        'logistics.solutionDetails.warehouse2',
+        'logistics.solutionDetails.warehouse3',
+        'logistics.solutionDetails.warehouse4',
       ],
       color: '#1890ff',
     },
     {
       icon: <SafetyOutlined />,
-      painPoint: 'Damage & Breakage',
-      problem: 'Large items are fragile and easily damaged during long-distance transport',
-      solution: 'Professional Packaging & Handling',
-      details: [
-        'Custom packaging for furniture and large items',
-        'Reinforced corner protection and cushioning',
-        'Standardized loading/unloading procedures',
-        'Insurance coverage for high-value items',
+      painPointKey: 'logistics.painPoints.damage',
+      problemKey: 'logistics.problems.damage',
+      solutionKey: 'logistics.solutions.packaging',
+      detailKeys: [
+        'logistics.solutionDetails.packaging1',
+        'logistics.solutionDetails.packaging2',
+        'logistics.solutionDetails.packaging3',
+        'logistics.solutionDetails.packaging4',
       ],
       color: '#52c41a',
     },
     {
       icon: <ToolOutlined />,
-      painPoint: 'Installation Challenges',
-      problem: 'Customers struggle with assembly of complex furniture and equipment',
-      solution: 'White Glove Delivery Service',
-      details: [
-        'Professional installation team available',
-        'Room-of-choice delivery',
-        'Assembly and setup included',
-        'Packaging removal and disposal',
+      painPointKey: 'logistics.painPoints.installation',
+      problemKey: 'logistics.problems.installation',
+      solutionKey: 'logistics.solutions.whiteGlove',
+      detailKeys: [
+        'logistics.solutionDetails.whiteGlove1',
+        'logistics.solutionDetails.whiteGlove2',
+        'logistics.solutionDetails.whiteGlove3',
+        'logistics.solutionDetails.whiteGlove4',
       ],
       color: '#faad14',
     },
@@ -66,22 +66,22 @@ const LogisticsSolutions = () => {
   // 费用透明化表格
   const pricingColumns = [
     {
-      title: 'Service Type',
+      title: t('logistics.pricingTable.serviceType'),
       dataIndex: 'service',
       key: 'service',
     },
     {
-      title: 'Pricing Model',
+      title: t('logistics.pricingTable.pricingModel'),
       dataIndex: 'model',
       key: 'model',
     },
     {
-      title: 'Example Rate',
+      title: t('logistics.pricingTable.exampleRate'),
       dataIndex: 'rate',
       key: 'rate',
     },
     {
-      title: 'Notes',
+      title: t('logistics.pricingTable.notes'),
       dataIndex: 'notes',
       key: 'notes',
     },
@@ -90,38 +90,38 @@ const LogisticsSolutions = () => {
   const pricingData = [
     {
       key: '1',
-      service: 'Ocean Freight (FCL)',
-      model: 'Per Container',
+      service: t('logistics.pricingTable.oceanFCL'),
+      model: t('logistics.pricingTable.perContainer'),
       rate: '$2,500 - $4,500',
-      notes: '20ft or 40ft container, port-to-port',
+      notes: t('logistics.pricingTable.fclNote'),
     },
     {
       key: '2',
-      service: 'Ocean Freight (LCL)',
-      model: 'Per CBM',
+      service: t('logistics.pricingTable.oceanLCL'),
+      model: t('logistics.pricingTable.perCBM'),
       rate: '$45 - $85 / CBM',
-      notes: 'Less than container load',
+      notes: t('logistics.pricingTable.lclNote'),
     },
     {
       key: '3',
-      service: 'Warehouse Storage',
-      model: 'Per Pallet/Month',
+      service: t('logistics.pricingTable.storage'),
+      model: t('logistics.pricingTable.perPallet'),
       rate: '$15 - $30',
-      notes: 'First 90 days free for active sellers',
+      notes: t('logistics.pricingTable.storageNote'),
     },
     {
       key: '4',
-      service: 'Local Delivery',
-      model: 'Per Shipment',
+      service: t('logistics.pricingTable.delivery'),
+      model: t('logistics.pricingTable.perShipment'),
       rate: '$50 - $200',
-      notes: 'Based on distance and item size',
+      notes: t('logistics.pricingTable.deliveryNote'),
     },
     {
       key: '5',
-      service: 'White Glove Service',
-      model: 'Per Item',
+      service: t('logistics.pricingTable.whiteGlove'),
+      model: t('logistics.pricingTable.perItem'),
       rate: '$80 - $300',
-      notes: 'Includes assembly and installation',
+      notes: t('logistics.pricingTable.whiteGloveNote'),
     },
   ]
 
@@ -133,16 +133,16 @@ const LogisticsSolutions = () => {
         {/* Hero Section */}
         <div className="hero-section">
           <div className="hero-content">
-            <h1>Large Item Logistics Solutions</h1>
-            <p>Making cross-border shipping of furniture, appliances, and equipment as easy as small parcels</p>
+            <h1>{t('logistics.title')}</h1>
+            <p>{t('logistics.subtitle')}</p>
           </div>
         </div>
 
         {/* 痛点与解决方案 */}
         <div className="solutions-section">
-          <h2>Pain Points & Solutions</h2>
-          <p className="section-subtitle">We solve the core challenges of large item cross-border trade</p>
-          
+          <h2>{t('logistics.painPointsTitle')}</h2>
+          <p className="section-subtitle">{t('logistics.painPointsSubtitle')}</p>
+
           <Row gutter={[24, 24]}>
             {solutions.map((item, index) => (
               <Col xs={24} md={12} key={index}>
@@ -152,18 +152,18 @@ const LogisticsSolutions = () => {
                       {item.icon}
                     </div>
                     <div className="solution-title">
-                      <h3>{item.painPoint}</h3>
-                      <p className="problem">{item.problem}</p>
+                      <h3>{t(item.painPointKey)}</h3>
+                      <p className="problem">{t(item.problemKey)}</p>
                     </div>
                   </div>
-                  
+
                   <div className="solution-body">
-                    <div className="solution-label">Our Solution:</div>
-                    <h4>{item.solution}</h4>
+                    <div className="solution-label">{t('logistics.ourSolution')}</div>
+                    <h4>{t(item.solutionKey)}</h4>
                     <ul className="solution-details">
-                      {item.details.map((detail, idx) => (
+                      {item.detailKeys.map((detailKey, idx) => (
                         <li key={idx}>
-                          <CheckCircleOutlined style={{ color: item.color }} /> {detail}
+                          <CheckCircleOutlined style={{ color: item.color }} /> {t(detailKey)}
                         </li>
                       ))}
                     </ul>
@@ -176,9 +176,9 @@ const LogisticsSolutions = () => {
 
         {/* 费用透明化 */}
         <div className="pricing-section">
-          <h2>Transparent Pricing</h2>
-          <p className="section-subtitle">No hidden fees - know exactly what you'll pay</p>
-          
+          <h2>{t('logistics.pricingTitle')}</h2>
+          <p className="section-subtitle">{t('logistics.pricingSubtitle')}</p>
+
           <Card className="pricing-card">
             <Table
               columns={pricingColumns}
@@ -189,12 +189,12 @@ const LogisticsSolutions = () => {
           </Card>
 
           <div className="pricing-notes">
-            <h4>💡 Cost-Saving Tips:</h4>
+            <h4>{t('logistics.costSavingTitle')}</h4>
             <ul>
-              <li>Combine multiple orders to fill a full container and save up to 60% on freight</li>
-              <li>Use our overseas warehouses to avoid rush shipping fees</li>
-              <li>Plan ahead - sea freight is 5-10x cheaper than air freight</li>
-              <li>Optimize packaging to reduce dimensional weight charges</li>
+              <li>{t('logistics.costSavingTips.tip1')}</li>
+              <li>{t('logistics.costSavingTips.tip2')}</li>
+              <li>{t('logistics.costSavingTips.tip3')}</li>
+              <li>{t('logistics.costSavingTips.tip4')}</li>
             </ul>
           </div>
         </div>
