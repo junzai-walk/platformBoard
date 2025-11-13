@@ -14,8 +14,8 @@ i18n
         translation: enUS,
       },
     },
-    lng: 'zh-CN',
-    fallbackLng: 'zh-CN',
+    lng: 'en-US', // 默认语言设置为英语
+    fallbackLng: 'en-US',
     interpolation: {
       escapeValue: false,
     },

@@ -9,6 +9,7 @@ import RegisterGuide from './pages/Auth/RegisterGuide'
 import SupplierRegister from './pages/Auth/SupplierRegister'
 import DistributorRegister from './pages/Auth/DistributorRegister'
 import ForgotPassword from './pages/Auth/ForgotPassword'
+import CategoriesPage from './pages/Categories'
 import CategoryPage from './pages/Category'
 import SearchResults from './pages/SearchResults'
 import ProductDetail from './pages/ProductDetail'
@@ -49,6 +50,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
 
           {/* 核心前台页面 */}
+          <Route path="/categories" element={<CategoriesPage />} />
           <Route path="/category/:id" element={<CategoryPage />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/product/:id" element={<ProductDetail />} />

@@ -35,16 +35,7 @@ const Header = () => {
     navigate('/')
   }
 
-  const categoryItems: MenuProps['items'] = [
-    {
-      key: '1',
-      label: <Link to="/category/electronics">{t('common.category')}</Link>,
-      children: [
-        { key: '1-1', label: '电子产品' },
-        { key: '1-2', label: '家用电器' },
-      ],
-    },
-  ]
+
 
   // 已登录用户的下拉菜单
   const userMenuItems: MenuProps['items'] = [
@@ -180,11 +171,7 @@ const Header = () => {
         <div className="container">
           <nav className="main-nav">
             <Link to="/">{t('common.home')}</Link>
-            <Dropdown menu={{ items: categoryItems }} placement="bottom">
-              <a onClick={(e) => e.preventDefault()}>
-                {t('common.category')} <DownOutlined />
-              </a>
-            </Dropdown>
+            <Link to="/categories">{t('common.category')}</Link>
             <Link to="/search">{t('common.market')}</Link>
             <Link to="/supplier-register">{t('common.supplierEntry')}</Link>
           </nav>

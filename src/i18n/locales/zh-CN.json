@@ -63,6 +63,15 @@
     "specifications": "规格参数",
     "packaging": "包装与物流",
     "faq": "采购咨询"
+  },
+  "categories": {
+    "title": "商品分类",
+    "subtitle": "探索我们跨多个行业的全面B2B产品系列",
+    "searchPlaceholder": "搜索分类...",
+    "totalCategories": "个分类",
+    "totalProducts": "件商品",
+    "products": "件商品",
+    "noResults": "未找到分类"
   }
 }
 

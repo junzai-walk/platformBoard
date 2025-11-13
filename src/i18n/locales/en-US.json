@@ -63,6 +63,15 @@
     "specifications": "Specifications",
     "packaging": "Packaging & Logistics",
     "faq": "FAQ"
+  },
+  "categories": {
+    "title": "Product Categories",
+    "subtitle": "Explore our comprehensive range of B2B products across multiple industries",
+    "searchPlaceholder": "Search categories...",
+    "totalCategories": "Categories",
+    "totalProducts": "Total Products",
+    "products": "Products",
+    "noResults": "No categories found"
   }
 }
 
