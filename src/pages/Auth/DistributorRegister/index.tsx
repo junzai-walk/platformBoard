@@ -1,11 +1,46 @@
-import { Form, Input, Button, Checkbox } from 'antd'
+import { Form, Input, Button, Checkbox, message } from 'antd'
 import { UserOutlined, LockOutlined, MailOutlined, PhoneOutlined, ShopOutlined } from '@ant-design/icons'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/contexts/AuthContext'
 import Layout from '@/components/Layout'
 import '../SupplierRegister/index.less'
 
 const DistributorRegister = () => {
+  const navigate = useNavigate()
+  const { login } = useAuth()
+
   const onFinish = (values: any) => {
-    console.log('Register values:', values)
+    // 验证密码一致性
+    if (values.password !== values.confirmPassword) {
+      message.error('两次输入的密码不一致！')
+      return
+    }
+
+    // 创建用户数据
+    const userData = {
+      id: 'distributor_' + Date.now(),
+      username: values.contactPerson,
+      userType: 'distributor' as const,
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop',
+      email: values.email,
+      phone: values.phone,
+      companyName: values.companyName,
+      permissions: ['order:view', 'purchase:manage', 'supplier:view'],
+    }
+
+    // 生成Token
+    const token = 'mock_token_' + Date.now()
+
+    // 保存到认证上下文和localStorage
+    login(userData, token)
+
+    // 显示成功提示
+    message.success('注册成功！正在跳转到分销商后台...')
+
+    // 延迟跳转到分销商后台
+    setTimeout(() => {
+      navigate('/distributor-admin', { replace: true })
+    }, 1000)
   }
 
   return (

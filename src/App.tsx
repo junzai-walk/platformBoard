@@ -2,6 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './contexts/AuthContext'
 import PrivateRoute from './components/PrivateRoute'
 import HomePage from './pages/Home'
+import LoginGuide from './pages/Auth/LoginGuide'
 import SupplierLogin from './pages/Auth/SupplierLogin'
 import DistributorLogin from './pages/Auth/DistributorLogin'
 import RegisterGuide from './pages/Auth/RegisterGuide'
@@ -39,6 +40,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
 
           {/* 用户认证 */}
+          <Route path="/login-guide" element={<LoginGuide />} />
           <Route path="/supplier-login" element={<SupplierLogin />} />
           <Route path="/distributor-login" element={<DistributorLogin />} />
           <Route path="/register-guide" element={<RegisterGuide />} />

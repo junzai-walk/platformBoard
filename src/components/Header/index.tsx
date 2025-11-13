@@ -52,15 +52,19 @@ const Header = () => {
       key: 'dashboard',
       label: (
         <Link to={user?.userType === 'supplier' ? '/supplier-admin' : '/distributor-admin'}>
-          <DashboardOutlined /> 我的后台
+          <DashboardOutlined /> {user?.userType === 'supplier' ? '供应商后台' : '分销商后台'}
         </Link>
       ),
+      style: { fontWeight: 600, color: '#ff6600' },
+    },
+    {
+      type: 'divider',
     },
     {
       key: 'settings',
       label: (
         <Link to={user?.userType === 'supplier' ? '/supplier-admin/shop-settings' : '/distributor-admin/addresses'}>
-          <SettingOutlined /> 设置
+          <SettingOutlined /> 账户设置
         </Link>
       ),
     },
@@ -161,7 +165,7 @@ const Header = () => {
                     <Link to="/register-guide">
                       <Button type="default">注册</Button>
                     </Link>
-                    <Link to="/register-guide">
+                    <Link to="/login-guide">
                       <Button type="primary">登录</Button>
                     </Link>
                   </>
