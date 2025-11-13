@@ -24,7 +24,7 @@ const DistributorAdminFavorites = () => {
     name: `商品名称 ${i + 1}`,
     supplier: `供应商${i + 1}`,
     price: `¥${(Math.random() * 100).toFixed(2)}`,
-    createTime: '2024-01-01 10:00:00',
+    createTime: '2025-01-01 10:00:00',
   }))
 
   return (

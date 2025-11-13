@@ -15,7 +15,7 @@ const ProductEdit = () => {
         name: '工业级电子元件批发',
         category: ['电子元器件', '芯片'],
         brand: '华为',
-        model: 'HW-2024',
+        model: 'HW-2025',
         unit: '件',
         totalStock: 1000,
         availableStock: 800,

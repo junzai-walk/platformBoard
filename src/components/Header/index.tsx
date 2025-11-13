@@ -98,7 +98,7 @@ const Header = () => {
         <div className="container">
           <div className="header-top-content">
             <div className="header-left">
-              <span>欢迎来到B2B电商平台</span>
+              <span>欢迎来到跨境电商平台</span>
             </div>
             <div className="header-right">
               <Dropdown menu={{ items: languageItems }} placement="bottomRight">

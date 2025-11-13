@@ -49,7 +49,7 @@ const ProductDetail = () => {
     ],
     category: '电子元器件 > 芯片 > 处理器芯片',
     brand: '华为',
-    model: 'HW-2024-PRO',
+    model: 'HW-2025-PRO',
     unit: '件',
     stock: 8500,
     sales: 15680,
@@ -101,7 +101,7 @@ const ProductDetail = () => {
     `,
     // 规格参数
     specifications: [
-      { name: '产品型号', value: 'HW-2024-PRO' },
+      { name: '产品型号', value: 'HW-2025-PRO' },
       { name: '品牌', value: '华为' },
       { name: '尺寸', value: '10 x 10 x 5 cm' },
       { name: '重量', value: '500g' },

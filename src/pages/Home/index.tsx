@@ -112,22 +112,118 @@ const Home = () => {
 
   // 扩展到16个分类
   const categories = [
-    { id: 1, name: '电子元器件', icon: '📱', count: 12580, color: '#ff6600' },
-    { id: 2, name: '机械设备', icon: '⚙️', count: 8920, color: '#1890ff' },
-    { id: 3, name: '五金工具', icon: '🔧', count: 15600, color: '#52c41a' },
-    { id: 4, name: '化工原料', icon: '🧪', count: 6780, color: '#722ed1' },
-    { id: 5, name: '建筑材料', icon: '🏗️', count: 9450, color: '#fa8c16' },
-    { id: 6, name: '办公用品', icon: '📝', count: 11200, color: '#13c2c2' },
-    { id: 7, name: '包装材料', icon: '📦', count: 7890, color: '#eb2f96' },
-    { id: 8, name: '纺织服装', icon: '👔', count: 18500, color: '#faad14' },
-    { id: 9, name: '家居用品', icon: '🏠', count: 13400, color: '#f5222d' },
-    { id: 10, name: '食品饮料', icon: '🍔', count: 8600, color: '#fa541c' },
-    { id: 11, name: '医疗器械', icon: '💊', count: 4320, color: '#2f54eb' },
-    { id: 12, name: '汽车配件', icon: '🚗', count: 10800, color: '#1890ff' },
-    { id: 13, name: '照明电器', icon: '💡', count: 6540, color: '#faad14' },
-    { id: 14, name: '安防设备', icon: '📹', count: 5670, color: '#722ed1' },
-    { id: 15, name: '环保设备', icon: '♻️', count: 3890, color: '#52c41a' },
-    { id: 16, name: '农业用品', icon: '🌾', count: 7120, color: '#13c2c2' },
+    {
+      id: 1,
+      name: '电子元器件',
+      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=300&fit=crop&q=80',
+      count: 12580,
+      color: '#ff6600'
+    },
+    {
+      id: 2,
+      name: '机械设备',
+      image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=300&h=300&fit=crop&q=80',
+      count: 8920,
+      color: '#1890ff'
+    },
+    {
+      id: 3,
+      name: '五金工具',
+      image: 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=300&h=300&fit=crop&q=80',
+      count: 15600,
+      color: '#52c41a'
+    },
+    {
+      id: 4,
+      name: '化工原料',
+      image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&h=300&fit=crop&q=80',
+      count: 6780,
+      color: '#722ed1'
+    },
+    {
+      id: 5,
+      name: '建筑材料',
+      image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=300&h=300&fit=crop&q=80',
+      count: 9450,
+      color: '#fa8c16'
+    },
+    {
+      id: 6,
+      name: '办公用品',
+      image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=300&h=300&fit=crop&q=80',
+      count: 11200,
+      color: '#13c2c2'
+    },
+    {
+      id: 7,
+      name: '包装材料',
+      image: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=300&h=300&fit=crop&q=80',
+      count: 7890,
+      color: '#eb2f96'
+    },
+    {
+      id: 8,
+      name: '纺织服装',
+      image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=300&h=300&fit=crop&q=80',
+      count: 18500,
+      color: '#faad14'
+    },
+    {
+      id: 9,
+      name: '家居用品',
+      image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=300&h=300&fit=crop&q=80',
+      count: 13400,
+      color: '#f5222d'
+    },
+    {
+      id: 10,
+      name: '食品饮料',
+      image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&h=300&fit=crop&q=80',
+      count: 8600,
+      color: '#fa541c'
+    },
+    {
+      id: 11,
+      name: '医疗器械',
+      image: 'https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=300&h=300&fit=crop&q=80',
+      count: 4320,
+      color: '#2f54eb'
+    },
+    {
+      id: 12,
+      name: '汽车配件',
+      image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=300&h=300&fit=crop&q=80',
+      count: 10800,
+      color: '#1890ff'
+    },
+    {
+      id: 13,
+      name: '照明电器',
+      image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=300&h=300&fit=crop&q=80',
+      count: 6540,
+      color: '#faad14'
+    },
+    {
+      id: 14,
+      name: '安防设备',
+      image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=300&h=300&fit=crop&q=80',
+      count: 5670,
+      color: '#722ed1'
+    },
+    {
+      id: 15,
+      name: '环保设备',
+      image: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=300&fit=crop&q=80',
+      count: 3890,
+      color: '#52c41a'
+    },
+    {
+      id: 16,
+      name: '农业用品',
+      image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=300&h=300&fit=crop&q=80',
+      count: 7120,
+      color: '#13c2c2'
+    },
   ]
 
   // 平台数据统计
@@ -515,7 +611,10 @@ const Home = () => {
               {categories.map((cat, index) => (
                 <Col key={cat.id} xs={12} sm={8} md={6} lg={3}>
                   <Link to={`/category/${cat.id}`} className="category-card animate-fade-in-up" style={{ animationDelay: `${index * 0.05}s` }}>
-                    <div className="category-icon" style={{ color: cat.color }}>{cat.icon}</div>
+                    <div className="category-image-container">
+                      <img src={cat.image} alt={cat.name} className="category-image" />
+                      <div className="category-overlay" style={{ background: `linear-gradient(135deg, ${cat.color}dd, ${cat.color}99)` }}></div>
+                    </div>
                     <div className="category-name">{cat.name}</div>
                     <div className="category-count">{cat.count.toLocaleString()}+</div>
                   </Link>

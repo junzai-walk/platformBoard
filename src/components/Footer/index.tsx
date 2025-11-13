@@ -82,7 +82,7 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="container">
           <div className="footer-bottom-content">
-            <p>© 2024 B2B电商平台. All rights reserved.</p>
+            <p>© 2025 跨境电商平台. All rights reserved.</p>
             <p>营业执照编号: 91310000XXXXXXXXXX | ICP备案号: 沪ICP备XXXXXXXX号</p>
           </div>
         </div>

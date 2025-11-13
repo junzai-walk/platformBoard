@@ -30,11 +30,11 @@ const SupplierAdminOrders = () => {
 
   const data = Array(10).fill(null).map((_, i) => ({
     key: i,
-    orderNo: `O${20240101 + i}`,
+    orderNo: `O${20250101 + i}`,
     distributor: `分销商${i + 1}`,
     amount: `¥${(Math.random() * 10000).toFixed(2)}`,
     status: ['待付款', '待发货', '已发货', '已完成'][i % 4],
-    createTime: '2024-01-01 10:00:00',
+    createTime: '2025-01-01 10:00:00',
   }))
 
   return (
