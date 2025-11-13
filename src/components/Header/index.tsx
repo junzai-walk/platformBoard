@@ -1,15 +1,19 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Input, Badge, Dropdown, Button, Space } from 'antd'
+import { Input, Badge, Dropdown, Button, Space, Avatar, message } from 'antd'
 import {
   SearchOutlined,
   ShoppingCartOutlined,
   UserOutlined,
   GlobalOutlined,
   DownOutlined,
+  LogoutOutlined,
+  DashboardOutlined,
+  SettingOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
+import { useAuth } from '../../contexts/AuthContext'
 import './index.less'
 
 const { Search } = Input
@@ -18,9 +22,17 @@ const Header = () => {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const [cartCount] = useState(3)
+  const { isAuthenticated, user, logout } = useAuth()
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng)
+  }
+
+  // 退出登录处理
+  const handleLogout = () => {
+    logout()
+    message.success('退出登录成功')
+    navigate('/')
   }
 
   const categoryItems: MenuProps['items'] = [
@@ -34,21 +46,34 @@ const Header = () => {
     },
   ]
 
-  const distributorItems: MenuProps['items'] = [
+  // 已登录用户的下拉菜单
+  const userMenuItems: MenuProps['items'] = [
     {
-      key: '1',
-      label: <Link to="/distributor-admin">{t('common.myBackend')}</Link>,
+      key: 'dashboard',
+      label: (
+        <Link to={user?.userType === 'supplier' ? '/supplier-admin' : '/distributor-admin'}>
+          <DashboardOutlined /> 我的后台
+        </Link>
+      ),
     },
     {
-      key: '2',
-      label: <Link to="/distributor-admin/orders">{t('common.messageCenter')}</Link>,
+      key: 'settings',
+      label: (
+        <Link to={user?.userType === 'supplier' ? '/supplier-admin/shop-settings' : '/distributor-admin/addresses'}>
+          <SettingOutlined /> 设置
+        </Link>
+      ),
     },
     {
       type: 'divider',
     },
     {
-      key: '3',
-      label: t('common.logout'),
+      key: 'logout',
+      label: (
+        <span onClick={handleLogout}>
+          <LogoutOutlined /> 退出登录
+        </span>
+      ),
       danger: true,
     },
   ]
@@ -111,21 +136,36 @@ const Header = () => {
 
             <div className="header-actions">
               <Space size="large">
-                <Dropdown menu={{ items: distributorItems }} placement="bottomRight">
-                  <Button type="text" icon={<UserOutlined />}>
-                    {t('common.iAmDistributor')} <DownOutlined />
-                  </Button>
-                </Dropdown>
-
                 <Link to="/cart">
                   <Badge count={cartCount} offset={[10, 0]}>
                     <ShoppingCartOutlined style={{ fontSize: 24 }} />
                   </Badge>
                 </Link>
 
-                <Link to="/supplier-login">
-                  <Button type="primary">{t('common.supplierEntrance')}</Button>
-                </Link>
+                {isAuthenticated && user ? (
+                  // 已登录状态
+                  <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
+                    <div style={{ cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 8 }}>
+                      <Avatar
+                        src={user.avatar}
+                        icon={<UserOutlined />}
+                        style={{ backgroundColor: '#ff6600' }}
+                      />
+                      <span style={{ color: '#333' }}>{user.username}</span>
+                      <DownOutlined style={{ fontSize: 12 }} />
+                    </div>
+                  </Dropdown>
+                ) : (
+                  // 未登录状态
+                  <>
+                    <Link to="/register-guide">
+                      <Button type="default">注册</Button>
+                    </Link>
+                    <Link to="/register-guide">
+                      <Button type="primary">登录</Button>
+                    </Link>
+                  </>
+                )}
               </Space>
             </div>
           </div>

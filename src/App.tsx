@@ -1,4 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
+import PrivateRoute from './components/PrivateRoute'
 import HomePage from './pages/Home'
 import SupplierLogin from './pages/Auth/SupplierLogin'
 import DistributorLogin from './pages/Auth/DistributorLogin'
@@ -30,50 +32,143 @@ import HelpCenter from './pages/HelpCenter'
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* 首页 */}
-        <Route path="/" element={<HomePage />} />
-        
-        {/* 用户认证 */}
-        <Route path="/supplier-login" element={<SupplierLogin />} />
-        <Route path="/distributor-login" element={<DistributorLogin />} />
-        <Route path="/register-guide" element={<RegisterGuide />} />
-        <Route path="/supplier-register" element={<SupplierRegister />} />
-        <Route path="/distributor-register" element={<DistributorRegister />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        
-        {/* 核心前台页面 */}
-        <Route path="/category/:id" element={<CategoryPage />} />
-        <Route path="/search" element={<SearchResults />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/supplier-shop/:supplierId" element={<SupplierShop />} />
-        
-        {/* 供应商后台 */}
-        <Route path="/supplier-admin" element={<SupplierAdminIndex />} />
-        <Route path="/supplier-admin/products" element={<SupplierAdminProducts />} />
-        <Route path="/supplier-admin/products/new" element={<SupplierAdminProductEdit />} />
-        <Route path="/supplier-admin/products/edit/:id" element={<SupplierAdminProductEdit />} />
-        <Route path="/supplier-admin/shop-settings" element={<SupplierAdminShopSettings />} />
-        <Route path="/supplier-admin/orders" element={<SupplierAdminOrders />} />
-        <Route path="/supplier-admin/customers" element={<SupplierAdminCustomers />} />
-        <Route path="/supplier-admin/analytics" element={<SupplierAdminAnalytics />} />
-        
-        {/* 分销商后台 */}
-        <Route path="/distributor-admin" element={<DistributorAdminIndex />} />
-        <Route path="/distributor-admin/orders" element={<DistributorAdminOrders />} />
-        <Route path="/distributor-admin/favorites" element={<DistributorAdminFavorites />} />
-        <Route path="/distributor-admin/addresses" element={<DistributorAdminAddresses />} />
-        <Route path="/distributor-admin/analytics" element={<DistributorAdminAnalytics />} />
-        
-        {/* 通用页面 */}
-        <Route path="/about-us" element={<AboutUs />} />
-        <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/help-center" element={<HelpCenter />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          {/* 首页 */}
+          <Route path="/" element={<HomePage />} />
+
+          {/* 用户认证 */}
+          <Route path="/supplier-login" element={<SupplierLogin />} />
+          <Route path="/distributor-login" element={<DistributorLogin />} />
+          <Route path="/register-guide" element={<RegisterGuide />} />
+          <Route path="/supplier-register" element={<SupplierRegister />} />
+          <Route path="/distributor-register" element={<DistributorRegister />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          {/* 核心前台页面 */}
+          <Route path="/category/:id" element={<CategoryPage />} />
+          <Route path="/search" element={<SearchResults />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/supplier-shop/:supplierId" element={<SupplierShop />} />
+
+          {/* 供应商后台 - 需要登录且用户类型为supplier */}
+          <Route
+            path="/supplier-admin"
+            element={
+              <PrivateRoute requiredUserType="supplier">
+                <SupplierAdminIndex />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/supplier-admin/products"
+            element={
+              <PrivateRoute requiredUserType="supplier">
+                <SupplierAdminProducts />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/supplier-admin/products/new"
+            element={
+              <PrivateRoute requiredUserType="supplier">
+                <SupplierAdminProductEdit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/supplier-admin/products/edit/:id"
+            element={
+              <PrivateRoute requiredUserType="supplier">
+                <SupplierAdminProductEdit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/supplier-admin/shop-settings"
+            element={
+              <PrivateRoute requiredUserType="supplier">
+                <SupplierAdminShopSettings />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/supplier-admin/orders"
+            element={
+              <PrivateRoute requiredUserType="supplier">
+                <SupplierAdminOrders />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/supplier-admin/customers"
+            element={
+              <PrivateRoute requiredUserType="supplier">
+                <SupplierAdminCustomers />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/supplier-admin/analytics"
+            element={
+              <PrivateRoute requiredUserType="supplier">
+                <SupplierAdminAnalytics />
+              </PrivateRoute>
+            }
+          />
+
+          {/* 分销商后台 - 需要登录且用户类型为distributor */}
+          <Route
+            path="/distributor-admin"
+            element={
+              <PrivateRoute requiredUserType="distributor">
+                <DistributorAdminIndex />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/distributor-admin/orders"
+            element={
+              <PrivateRoute requiredUserType="distributor">
+                <DistributorAdminOrders />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/distributor-admin/favorites"
+            element={
+              <PrivateRoute requiredUserType="distributor">
+                <DistributorAdminFavorites />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/distributor-admin/addresses"
+            element={
+              <PrivateRoute requiredUserType="distributor">
+                <DistributorAdminAddresses />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/distributor-admin/analytics"
+            element={
+              <PrivateRoute requiredUserType="distributor">
+                <DistributorAdminAnalytics />
+              </PrivateRoute>
+            }
+          />
+
+          {/* 通用页面 */}
+          <Route path="/about-us" element={<AboutUs />} />
+          <Route path="/contact-us" element={<ContactUs />} />
+          <Route path="/help-center" element={<HelpCenter />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   )
 }
 
