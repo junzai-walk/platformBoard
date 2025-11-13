@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { Carousel, Row, Col, Card, Tag, Statistic, Avatar, Rate } from 'antd'
+import { Carousel, Row, Col, Card, Tag, Statistic, Avatar, Rate, Button } from 'antd'
 import {
   TrophyOutlined,
   RocketOutlined,
@@ -13,13 +13,86 @@ import {
   CheckCircleOutlined,
   StarOutlined,
   CrownOutlined,
+  HomeOutlined,
+  ClockCircleOutlined,
+  ArrowRightOutlined,
 } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import Layout from '@/components/Layout'
 import './index.less'
 
 const { Meta } = Card
 
 const Home = () => {
+  const { t } = useTranslation()
+  // 大件商品分类（新增）
+  const largeItemCategories = [
+    {
+      id: 'furniture',
+      nameZh: '家具家居',
+      nameEn: 'Furniture & Home',
+      icon: '🛋️',
+      image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=400&h=300&fit=crop',
+      count: 28500,
+      color: '#ff6600',
+    },
+    {
+      id: 'appliances',
+      nameZh: '家用电器',
+      nameEn: 'Home Appliances',
+      icon: '🔌',
+      image: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?w=400&h=300&fit=crop',
+      count: 15600,
+      color: '#1890ff',
+    },
+    {
+      id: 'fitness',
+      nameZh: '健身器材',
+      nameEn: 'Fitness Equipment',
+      icon: '💪',
+      image: 'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=400&h=300&fit=crop',
+      count: 8900,
+      color: '#52c41a',
+    },
+    {
+      id: 'outdoor',
+      nameZh: '户外设施',
+      nameEn: 'Outdoor Facilities',
+      icon: '🏕️',
+      image: 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&h=300&fit=crop',
+      count: 6700,
+      color: '#722ed1',
+    },
+  ]
+
+  // 海外仓优势（新增）
+  const warehouseAdvantages = [
+    {
+      icon: <GlobalOutlined />,
+      titleKey: 'home.advantage1Title',
+      descKey: 'home.advantage1Desc',
+      color: '#ff6600',
+    },
+    {
+      icon: <RocketOutlined />,
+      titleKey: 'home.advantage2Title',
+      descKey: 'home.advantage2Desc',
+      color: '#1890ff',
+    },
+    {
+      icon: <DollarOutlined />,
+      titleKey: 'home.advantage3Title',
+      descKey: 'home.advantage3Desc',
+      color: '#52c41a',
+    },
+    {
+      icon: <HomeOutlined />,
+      titleKey: 'home.advantage4Title',
+      descKey: 'home.advantage4Desc',
+      color: '#722ed1',
+    },
+  ]
+
   const banners = [
     {
       id: 1,
@@ -282,6 +355,102 @@ const Home = () => {
   return (
     <Layout>
       <div className="home-page">
+        {/* Hero Section - 大件商品定位 */}
+        <section className="hero-section-large-items">
+          <div className="hero-overlay"></div>
+          <div className="container hero-content">
+            <h1 className="hero-title">{t('home.heroTitle')}</h1>
+            <p className="hero-subtitle">{t('home.heroSubtitle')}</p>
+            <p className="hero-desc">{t('home.heroDesc')}</p>
+            <div className="hero-actions">
+              <Link to="/categories">
+                <Button type="primary" size="large" icon={<ShoppingOutlined />}>
+                  {t('home.exploreProducts')}
+                </Button>
+              </Link>
+              <Link to="/overseas-warehouse">
+                <Button size="large" icon={<GlobalOutlined />} style={{ marginLeft: 16 }}>
+                  {t('home.viewWarehouse')}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* 大件商品分类展示 */}
+        <section className="large-item-categories-section">
+          <div className="container">
+            <h2 className="section-title">
+              <span className="text-gradient">{t('home.largeItemCategories')}</span>
+            </h2>
+            <p className="section-subtitle">{t('home.largeItemCategoriesDesc')}</p>
+            <Row gutter={[24, 24]}>
+              {largeItemCategories.map((category, index) => (
+                <Col key={category.id} xs={24} sm={12} md={6}>
+                  <Link to={`/categories?filter=${category.id}`}>
+                    <Card
+                      hoverable
+                      className="large-item-category-card animate-fade-in-up"
+                      style={{ animationDelay: `${index * 0.1}s` }}
+                      cover={
+                        <div className="category-image-wrapper">
+                          <img alt={category.nameZh} src={category.image} />
+                          <div className="category-overlay">
+                            <span className="category-icon">{category.icon}</span>
+                          </div>
+                        </div>
+                      }
+                    >
+                      <Card.Meta
+                        title={
+                          <div className="category-title">
+                            <span>{t('common.lng') === 'zh-CN' ? category.nameZh : category.nameEn}</span>
+                          </div>
+                        }
+                        description={
+                          <div className="category-count" style={{ color: category.color }}>
+                            {category.count.toLocaleString()}+ {t('home.products')}
+                          </div>
+                        }
+                      />
+                    </Card>
+                  </Link>
+                </Col>
+              ))}
+            </Row>
+          </div>
+        </section>
+
+        {/* 海外仓优势 */}
+        <section className="warehouse-advantages-section">
+          <div className="container">
+            <h2 className="section-title">
+              <span className="text-gradient">{t('home.warehouseAdvantages')}</span>
+            </h2>
+            <p className="section-subtitle">{t('home.warehouseAdvantagesDesc')}</p>
+            <Row gutter={[24, 24]}>
+              {warehouseAdvantages.map((advantage, index) => (
+                <Col key={index} xs={24} sm={12} md={6}>
+                  <Card className="advantage-card animate-fade-in-up" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <div className="advantage-icon" style={{ color: advantage.color }}>
+                      {advantage.icon}
+                    </div>
+                    <h3>{t(advantage.titleKey)}</h3>
+                    <p>{t(advantage.descKey)}</p>
+                  </Card>
+                </Col>
+              ))}
+            </Row>
+            <div className="section-action" style={{ marginTop: 32, textAlign: 'center' }}>
+              <Link to="/logistics-solutions">
+                <Button type="primary" size="large" icon={<ArrowRightOutlined />}>
+                  {t('common.logisticsSolutions')}
+                </Button>
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Banner轮播 */}
         <section className="banner-section">
           <div className="wide-container">
