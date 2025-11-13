@@ -115,8 +115,8 @@ const Header = () => {
         <div className="container">
           <div className="header-main-content">
             <Link to="/" className="logo">
-              <img src="https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=50&h=50&fit=crop" alt="Logo" style={{ width: 50, height: 50, borderRadius: '50%', marginRight: 12 }} />
-              <h1>B2B Platform</h1>
+              <img src="https://p0.ssl.qhimgs1.com/sdr/400__/t046232ddd22ecd2936.jpg" alt="Logo" style={{ width: 50, height: 50, borderRadius: '50%', marginRight: 12 }} />
+              <h1>跨境电商平台</h1>
             </Link>
 
             <div className="search-bar">

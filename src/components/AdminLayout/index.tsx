@@ -49,7 +49,7 @@ const AdminLayout = ({ children, menuItems, selectedKey }: AdminLayoutProps) => 
       <Sider collapsible collapsed={collapsed} onCollapse={setCollapsed}>
         <div className="logo">
           <Link to="/">
-            <h2>{collapsed ? 'B2B' : 'B2B Platform'}</h2>
+            <h2>{collapsed ? 'B2B' : '跨境电商平台'}</h2>
           </Link>
         </div>
         <Menu theme="dark" selectedKeys={[selectedKey]} mode="inline" items={menuItems} />
