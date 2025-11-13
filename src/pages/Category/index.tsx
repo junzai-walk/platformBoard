@@ -1,6 +1,7 @@
 import Layout from '@/components/Layout'
 import { Row, Col, Card, Select, Checkbox, Slider } from 'antd'
 import { AppstoreOutlined, BarsOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
 import './index.less'
 
 const { Meta } = Card
@@ -77,15 +78,17 @@ const CategoryPage = () => {
               <Row gutter={[16, 16]}>
                 {products.map((product) => (
                   <Col key={product.id} xs={24} sm={12} md={8}>
-                    <Card hoverable cover={<img alt={product.name} src={product.image} />}>
-                      <Meta title={product.name} description={
-                        <div>
-                          <div className="price">{product.price}</div>
-                          <div>起订: {product.moq}</div>
-                          <div>已售: {product.sales}</div>
-                        </div>
-                      } />
-                    </Card>
+                    <Link to={`/product/${product.id}`}>
+                      <Card hoverable cover={<img alt={product.name} src={product.image} />}>
+                        <Meta title={product.name} description={
+                          <div>
+                            <div className="price">{product.price}</div>
+                            <div>起订: {product.moq}</div>
+                            <div>已售: {product.sales}</div>
+                          </div>
+                        } />
+                      </Card>
+                    </Link>
                   </Col>
                 ))}
               </Row>

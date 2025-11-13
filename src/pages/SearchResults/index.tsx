@@ -1,5 +1,6 @@
 import Layout from '@/components/Layout'
 import { Card, Row, Col } from 'antd'
+import { Link } from 'react-router-dom'
 
 const SearchResults = () => {
   const productImages = [
@@ -20,9 +21,11 @@ const SearchResults = () => {
         <Row gutter={[16, 16]}>
           {Array(8).fill(null).map((_, i) => (
             <Col key={i} xs={24} sm={12} md={6}>
-              <Card hoverable cover={<img alt="product" src={productImages[i]} />}>
-                <Card.Meta title={`商品 ${i + 1}`} description="¥10.00 - ¥50.00" />
-              </Card>
+              <Link to={`/product/${i + 1}`}>
+                <Card hoverable cover={<img alt="product" src={productImages[i]} />}>
+                  <Card.Meta title={`商品 ${i + 1}`} description="¥10.00 - ¥50.00" />
+                </Card>
+              </Link>
             </Col>
           ))}
         </Row>
