@@ -15,7 +15,6 @@ import {
   Avatar,
 } from 'antd'
 import {
-  ShopOutlined,
   StarOutlined,
   PhoneOutlined,
   EnvironmentOutlined,

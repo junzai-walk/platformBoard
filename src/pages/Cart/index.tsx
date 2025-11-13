@@ -14,7 +14,7 @@ const Cart = () => {
     {
       title: '商品信息',
       dataIndex: 'product',
-      render: (text: string, record: any) => (
+      render: ( record: any) => (
         <div className="product-info">
           <img src={record.image} alt={record.name} />
           <span>{record.name}</span>

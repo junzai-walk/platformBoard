@@ -14,7 +14,6 @@ import {
   StarOutlined,
   CrownOutlined,
   HomeOutlined,
-  ClockCircleOutlined,
   ArrowRightOutlined,
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'

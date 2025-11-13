@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { Row, Col, Card, Statistic } from 'antd'
 import { GlobalOutlined, HomeOutlined, RocketOutlined, ClockCircleOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
@@ -10,7 +10,7 @@ import './index.less'
 
 const OverseasWarehouse = () => {
   const { t } = useTranslation()
-  const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(null)
+  // const [ setSelectedWarehouse] = useState<string | null>(null)
 
   // 注册简化的世界地图
   useEffect(() => {
@@ -265,7 +265,6 @@ const OverseasWarehouse = () => {
                       <div className="warehouse-badge">{warehouse.dailyOrders} {t('warehouse.dailyOrdersBadge')}</div>
                     </div>
                   }
-                  onClick={() => setSelectedWarehouse(warehouse.id)}
                 >
                   <Card.Meta
                     title={t(warehouse.nameKey)}

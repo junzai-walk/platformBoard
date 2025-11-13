@@ -9,7 +9,7 @@ import './index.less'
 const { Search } = Input
 
 const CategoriesPage = () => {
-  const { t, i18n } = useTranslation()
+  const { i18n } = useTranslation()
   const [searchTerm, setSearchTerm] = useState('')
 
   // 适合美国市场的B2B商品分类（中英文）
