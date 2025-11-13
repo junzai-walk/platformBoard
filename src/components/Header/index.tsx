@@ -172,6 +172,8 @@ const Header = () => {
           <nav className="main-nav">
             <Link to="/">{t('common.home')}</Link>
             <Link to="/categories">{t('common.category')}</Link>
+            <Link to="/overseas-warehouse">海外仓网络</Link>
+            <Link to="/logistics-solutions">物流解决方案</Link>
             <Link to="/search">{t('common.market')}</Link>
             <Link to="/supplier-register">{t('common.supplierEntry')}</Link>
           </nav>

@@ -31,6 +31,8 @@ import DistributorAdminAnalytics from './pages/DistributorAdmin/Analytics'
 import AboutUs from './pages/AboutUs'
 import ContactUs from './pages/ContactUs'
 import HelpCenter from './pages/HelpCenter'
+import OverseasWarehouse from './pages/OverseasWarehouse'
+import LogisticsSolutions from './pages/LogisticsSolutions'
 
 function App() {
   return (
@@ -48,6 +50,10 @@ function App() {
           <Route path="/supplier-register" element={<SupplierRegister />} />
           <Route path="/distributor-register" element={<DistributorRegister />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+
+          {/* 解决方案与供应链模块 */}
+          <Route path="/overseas-warehouse" element={<OverseasWarehouse />} />
+          <Route path="/logistics-solutions" element={<LogisticsSolutions />} />
 
           {/* 核心前台页面 */}
           <Route path="/categories" element={<CategoriesPage />} />
