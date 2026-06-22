@@ -151,6 +151,55 @@ const ProductDetail = () => {
   ]
 
   const handleAddToCart = () => {
+    const STORAGE_KEY = 'b2b_cart_items'
+    const stored = localStorage.getItem(STORAGE_KEY)
+    let cartList: any[] = []
+    if (stored) {
+      try {
+        cartList = JSON.parse(stored)
+      } catch (e) {
+        console.error(e)
+      }
+    } else {
+      // If first time, initialize with default items first
+      cartList = [
+        {
+          key: '1',
+          id: '1',
+          image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=100&h=100&fit=crop',
+          name: '工业级电子元件批发 高品质芯片模块',
+          price: 45.0,
+          quantity: 100,
+        },
+        {
+          key: '2',
+          id: '2',
+          image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=100&h=100&fit=crop',
+          name: '高品质办公家具套装',
+          price: 500.0,
+          quantity: 10,
+        },
+      ]
+    }
+
+    const existingIndex = cartList.findIndex((item) => item.id === product.id)
+    const currentPrice = getCurrentPrice()
+    if (existingIndex > -1) {
+      cartList[existingIndex].quantity += quantity
+      cartList[existingIndex].price = currentPrice
+    } else {
+      cartList.push({
+        key: product.id,
+        id: product.id,
+        image: product.images[0],
+        name: product.name,
+        price: currentPrice,
+        quantity: quantity,
+      })
+    }
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(cartList))
+    window.dispatchEvent(new Event('cart_updated'))
     message.success('已加入购物车')
   }
 

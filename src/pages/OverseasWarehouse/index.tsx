@@ -5,29 +5,15 @@ import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
+import worldGeoJson from '@/assets/world.json'
 import './index.less'
 
 const OverseasWarehouse = () => {
   const { t } = useTranslation()
   // const [ setSelectedWarehouse] = useState<string | null>(null)
 
-  // 注册简化的世界地图
+  // 注册真实的世界地图
   useEffect(() => {
-    const worldGeoJson = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: { name: 'World' },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[
-              [-180, 85], [180, 85], [180, -85], [-180, -85], [-180, 85]
-            ]]
-          }
-        }
-      ]
-    }
     echarts.registerMap('world', worldGeoJson as any)
   }, [])
 

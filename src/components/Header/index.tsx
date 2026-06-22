@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { Input, Badge, Dropdown, Button, Space, Avatar, message } from 'antd'
@@ -21,7 +21,48 @@ const { Search } = Input
 const Header = () => {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
-  const [cartCount] = useState(3)
+  
+  const [cartCount, setCartCount] = useState(() => {
+    const STORAGE_KEY = 'b2b_cart_items'
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      try {
+        const list = JSON.parse(stored)
+        return list.reduce((sum: number, item: any) => sum + item.quantity, 0)
+      } catch (e) {
+        console.error(e)
+      }
+    }
+    return 0
+  })
+
+  useEffect(() => {
+    const updateCount = () => {
+      const STORAGE_KEY = 'b2b_cart_items'
+      const stored = localStorage.getItem(STORAGE_KEY)
+      if (stored) {
+        try {
+          const list = JSON.parse(stored)
+          const count = list.reduce((sum: number, item: any) => sum + item.quantity, 0)
+          setCartCount(count)
+          return
+        } catch (e) {
+          console.error(e)
+        }
+      }
+      setCartCount(0)
+    }
+
+    updateCount()
+
+    window.addEventListener('storage', updateCount)
+    window.addEventListener('cart_updated', updateCount)
+    return () => {
+      window.removeEventListener('storage', updateCount)
+      window.removeEventListener('cart_updated', updateCount)
+    }
+  }, [])
+
   const { isAuthenticated, user, logout } = useAuth()
 
   const changeLanguage = (lng: string) => {

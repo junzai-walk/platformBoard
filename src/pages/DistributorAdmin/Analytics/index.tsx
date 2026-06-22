@@ -4,6 +4,7 @@ import { ArrowUpOutlined, ArrowDownOutlined, ShoppingOutlined, DollarOutlined, T
 import ReactECharts from 'echarts-for-react'
 import * as echarts from 'echarts'
 import AdminLayout, { distributorMenuItems } from '@/components/AdminLayout'
+import usaGeoJson from '@/assets/usa.json'
 import './index.less'
 
 const DistributorAdminAnalytics = () => {
@@ -314,24 +315,8 @@ const DistributorAdminAnalytics = () => {
     ],
   }
 
-  // 注册美国地图（使用简化的GeoJSON）
+  // 注册美国地图
   useEffect(() => {
-    // 简化的美国地图GeoJSON
-    const usaGeoJson = {
-      type: 'FeatureCollection',
-      features: [
-        {
-          type: 'Feature',
-          properties: { name: 'USA' },
-          geometry: {
-            type: 'Polygon',
-            coordinates: [[
-              [-125, 50], [-125, 25], [-65, 25], [-65, 50], [-125, 50]
-            ]]
-          }
-        }
-      ]
-    }
     echarts.registerMap('USA', usaGeoJson as any)
   }, [])
 
