@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Row, Col, Card, Input } from 'antd'
+import { Card, Input } from 'antd'
 import { SearchOutlined } from '@ant-design/icons'
 import Layout from '@/components/Layout'
 import './index.less'
@@ -291,6 +291,33 @@ const CategoriesPage = () => {
     return name.toLowerCase().includes(searchTerm.toLowerCase())
   })
 
+  // Dynamic heights for masonry effect
+  const getImageHeight = (id: number) => {
+    const heights = [180, 240, 200, 260, 220, 280];
+    return heights[id % heights.length];
+  }
+
+  // Detect responsive columns
+  const [columnsCount, setColumnsCount] = useState(4)
+  useEffect(() => {
+    const updateColumns = () => {
+      const width = window.innerWidth
+      if (width > 1200) setColumnsCount(4)
+      else if (width > 900) setColumnsCount(3)
+      else if (width > 576) setColumnsCount(2)
+      else setColumnsCount(1)
+    }
+    updateColumns()
+    window.addEventListener('resize', updateColumns)
+    return () => window.removeEventListener('resize', updateColumns)
+  }, [])
+
+  // Distribute items to columns left-to-right (round-robin)
+  const columns = Array.from({ length: columnsCount }, (): any[] => [])
+  filteredCategories.forEach((cat, index) => {
+    columns[index % columnsCount].push(cat)
+  })
+
   return (
     <Layout>
       <div className="categories-page">
@@ -329,42 +356,52 @@ const CategoriesPage = () => {
             </span>
           </div>
 
-          <Row gutter={[24, 24]} className="categories-grid">
-            {filteredCategories.map((category) => (
-              <Col key={category.id} xs={24} sm={12} md={8} lg={6}>
-                <Link to={`/category/${category.id}`}>
-                  <Card
-                    hoverable
-                    className="category-card"
-                    style={{ borderTop: `4px solid ${category.color}` }}
-                  >
-                    <div className="category-image-container">
-                      <img src={category.image} alt={i18n.language === 'en-US' ? category.nameEn : category.nameZh} className="category-image" />
-                      <div className="category-overlay" ></div>
+          <div className="categories-masonry">
+            {columns.map((columnItems, colIdx) => (
+              <div key={colIdx} className="categories-masonry-col">
+                {columnItems.map((category, index) => {
+                  const imageHeight = getImageHeight(category.id);
+                  return (
+                    <div 
+                      key={category.id} 
+                      className="category-masonry-item animate-fade-in-up" 
+                      style={{ animationDelay: `${index * 0.05}s` }}
+                    >
+                      <Link to={`/category/${category.id}`}>
+                        <Card
+                          hoverable
+                          className="category-card"
+                          style={{ borderTop: `4px solid ${category.color}` }}
+                        >
+                          <div className="category-image-container" style={{ height: imageHeight }}>
+                            <img 
+                              src={category.image} 
+                              alt={i18n.language === 'en-US' ? category.nameEn : category.nameZh} 
+                              className="category-image" 
+                            />
+                            <div className="category-overlay"></div>
+                          </div>
+                          <h3 className="category-name">
+                            {i18n.language === 'en-US' ? category.nameEn : category.nameZh}
+                          </h3>
+                          <div className="category-count">
+                            {category.count.toLocaleString()} {i18n.language === 'en-US' ? 'Products' : '件商品'}
+                          </div>
+                          <div className="category-subcategories">
+                            {category.subcategories.map((sub: string, idx: number) => (
+                              <span key={idx} className="subcategory-tag">
+                                {sub}
+                              </span>
+                            ))}
+                          </div>
+                        </Card>
+                      </Link>
                     </div>
-                    <h3 className="category-name">
-                      {i18n.language === 'en-US' ? category.nameEn : category.nameZh}
-                    </h3>
-                    <div className="category-count">
-                      {category.count.toLocaleString()} {i18n.language === 'en-US' ? 'Products' : '件商品'}
-                    </div>
-                    <div className="category-subcategories">
-                      {category.subcategories.slice(0, 3).map((sub, index) => (
-                        <span key={index} className="subcategory-tag">
-                          {sub}
-                        </span>
-                      ))}
-                      {category.subcategories.length > 3 && (
-                        <span className="subcategory-more">
-                          +{category.subcategories.length - 3}
-                        </span>
-                      )}
-                    </div>
-                  </Card>
-                </Link>
-              </Col>
+                  )
+                })}
+              </div>
             ))}
-          </Row>
+          </div>
 
           {filteredCategories.length === 0 && (
             <div className="no-results">
