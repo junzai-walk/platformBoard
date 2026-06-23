@@ -16,11 +16,12 @@ import type { MenuProps } from 'antd'
 import { useAuth } from '../../contexts/AuthContext'
 import './index.less'
 
-const { Search } = Input
+// Removed deprecated Input.Search in favor of Space.Compact
 
 const Header = () => {
   const { t, i18n } = useTranslation()
   const navigate = useNavigate()
+  const [searchText, setSearchText] = useState('')
   
   const [cartCount, setCartCount] = useState(() => {
     const STORAGE_KEY = 'b2b_cart_items'
@@ -161,13 +162,37 @@ const Header = () => {
             </Link>
 
             <div className="search-bar">
-              <Search
-                placeholder={t('common.searchPlaceholder')}
-                allowClear
-                enterButton={<SearchOutlined />}
-                size="large"
-                onSearch={onSearch}
-              />
+              <Space.Compact style={{ width: '100%' }}>
+                <Input
+                  placeholder={t('common.searchPlaceholder')}
+                  allowClear
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                  onPressEnter={() => onSearch(searchText)}
+                  size="large"
+                  style={{
+                    borderRadius: '24px 0 0 24px',
+                    height: '44px',
+                    fontSize: '14px',
+                    border: '2px solid #e8e8e8',
+                    borderRight: 'none',
+                  }}
+                />
+                <Button 
+                  type="primary" 
+                  size="large" 
+                  icon={<SearchOutlined />}
+                  onClick={() => onSearch(searchText)}
+                  style={{
+                    height: '44px',
+                    borderRadius: '0 24px 24px 0',
+                    background: 'linear-gradient(135deg, #ff6600 0%, #ff8533 100%)',
+                    border: 'none',
+                    boxShadow: 'none',
+                    color: 'white',
+                  }}
+                />
+              </Space.Compact>
             </div>
 
             <div className="header-actions">

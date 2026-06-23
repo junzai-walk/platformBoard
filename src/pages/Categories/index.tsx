@@ -6,7 +6,7 @@ import { SearchOutlined } from '@ant-design/icons'
 import Layout from '@/components/Layout'
 import './index.less'
 
-const { Search } = Input
+// Removed deprecated Input.Search in favor of standard Input
 
 const CategoriesPage = () => {
   const { i18n } = useTranslation()
@@ -330,13 +330,22 @@ const CategoriesPage = () => {
                 ? 'Explore our comprehensive range of B2B products across multiple industries'
                 : '探索我们跨多个行业的全面B2B产品系列'}
             </p>
-            <Search
+            <Input
               placeholder={i18n.language === 'en-US' ? 'Search categories...' : '搜索分类...'}
               allowClear
               size="large"
               prefix={<SearchOutlined />}
               onChange={(e) => setSearchTerm(e.target.value)}
-              style={{ maxWidth: 600, margin: '0 auto' }}
+              style={{ 
+                maxWidth: 600, 
+                margin: '0 auto',
+                height: 48,
+                borderRadius: 24,
+                boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
+                border: 'none',
+                padding: '0 24px',
+                fontSize: 16
+              }}
             />
           </div>
         </div>
