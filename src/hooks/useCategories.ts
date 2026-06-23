@@ -277,7 +277,7 @@ const initialCategories: CategoryItem[] = [
     id: 30,
     nameEn: 'Measurement & Analysis',
     nameZh: '仪器仪表',
-    image: 'https://images.unsplash.com/photo-1581093458791-9d42e1d94d1f?w=300&h=300&fit=crop&q=80',
+    image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300&h=300&fit=crop&q=80',
     count: 6920,
     color: '#52c41a',
     subcategories: ['Testing Equipment', 'Sensors', 'Meters', 'Lab Instruments']

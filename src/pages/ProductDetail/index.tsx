@@ -1,5 +1,3 @@
-import { useState } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
 import {
   Row,
   Col,
@@ -14,7 +12,6 @@ import {
   Rate,
   Avatar,
   Divider,
-  message,
   Breadcrumb,
 } from 'antd'
 import {
@@ -26,106 +23,27 @@ import {
   HeartOutlined,
   ShareAltOutlined,
   PhoneOutlined,
+  GiftOutlined,
 } from '@ant-design/icons'
 import Layout from '@/components/Layout'
+import { useProductDetail, PriceLevel } from '@/hooks/useProductDetail'
 import './index.less'
 
 const ProductDetail = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
-  const [quantity, setQuantity] = useState(100)
-  const [selectedSpec, setSelectedSpec] = useState<any>({})
-  const [currentImage, setCurrentImage] = useState(0)
-
-  // 模拟商品数据
-  const product = {
-    id: id || '1',
-    name: '工业级电子元件批发 高品质芯片模块',
-    images: [
-      'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=600&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=600&h=600&fit=crop',
-      'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&h=600&fit=crop',
-    ],
-    category: '电子元器件 > 芯片 > 处理器芯片',
-    brand: '华为',
-    model: 'HW-2025-PRO',
-    unit: '件',
-    stock: 8500,
-    sales: 15680,
-    rating: 4.9,
-    reviews: 1258,
-    tags: ['热销', '认证', '包邮'],
-    // 价格阶梯
-    priceLevels: [
-      { minQuantity: 1, maxQuantity: 99, price: 50.0 },
-      { minQuantity: 100, maxQuantity: 499, price: 45.0 },
-      { minQuantity: 500, maxQuantity: 999, price: 40.0 },
-      { minQuantity: 1000, maxQuantity: null, price: 35.0 },
-    ],
-    // 规格选项
-    specs: {
-      color: ['黑色', '银色', '金色'],
-      capacity: ['16GB', '32GB', '64GB'],
-    },
-    // 物流信息
-    shipping: {
-      from: '广东省深圳市南山区',
-      deliveryTime: '48小时内发货',
-      freight: '满500件包邮',
-      estimatedArrival: '3-5天',
-    },
-    // 供应商信息
-    supplier: {
-      id: '1',
-      name: '深圳市华强电子科技有限公司',
-      logo: 'https://images.unsplash.com/photo-1560179707-f14e90ef3623?w=100&h=100&fit=crop',
-      rating: 4.9,
-      productCount: 1580,
-      certified: true,
-      location: '广东省深圳市',
-      responseRate: 98,
-      responseTime: '2小时',
-    },
-    // 商品详情
-    description: `
-      <h3>产品特点</h3>
-      <ul>
-        <li>采用先进的制造工艺，性能稳定可靠</li>
-        <li>通过ISO9001质量体系认证</li>
-        <li>支持定制化服务，满足不同需求</li>
-        <li>提供完善的售后服务和技术支持</li>
-      </ul>
-      <h3>应用领域</h3>
-      <p>广泛应用于通信设备、工业控制、汽车电子、消费电子等领域。</p>
-    `,
-    // 规格参数
-    specifications: [
-      { name: '产品型号', value: 'HW-2025-PRO' },
-      { name: '品牌', value: '华为' },
-      { name: '尺寸', value: '10 x 10 x 5 cm' },
-      { name: '重量', value: '500g' },
-      { name: '材质', value: 'ABS塑料 + 金属' },
-      { name: '工作温度', value: '-20°C ~ 85°C' },
-      { name: '认证', value: 'CE, FCC, RoHS' },
-      { name: '质保期', value: '1年' },
-    ],
-    // 售后保障
-    afterSales: [
-      '7天无理由退换货',
-      '质保期内免费维修',
-      '全国联保',
-      '终身技术支持',
-    ],
-  }
-
-  // 计算当前价格
-  const getCurrentPrice = () => {
-    const level = product.priceLevels.find(
-      (l) => quantity >= l.minQuantity && (l.maxQuantity === null || quantity <= l.maxQuantity)
-    )
-    return level ? level.price : product.priceLevels[0].price
-  }
+  const {
+    product,
+    quantity,
+    setQuantity,
+    selectedSpec,
+    setSelectedSpec,
+    currentImage,
+    setCurrentImage,
+    getCurrentPrice,
+    handleAddToCart,
+    handleBuyNow,
+    handleContactSupplier,
+    navigate,
+  } = useProductDetail()
 
   // 价格阶梯表格列
   const priceLevelColumns = [
@@ -133,10 +51,10 @@ const ProductDetail = () => {
       title: '起订量',
       dataIndex: 'minQuantity',
       key: 'minQuantity',
-      render: (min: number, record: any) =>
+      render: (min: number, record: PriceLevel) =>
         record.maxQuantity
-          ? `${min} - ${record.maxQuantity} 件`
-          : `${min} 件以上`,
+          ? `${min} - ${record.maxQuantity} ${product.unit}`
+          : `${min} ${product.unit}以上`,
     },
     {
       title: '单价',
@@ -150,93 +68,34 @@ const ProductDetail = () => {
     },
   ]
 
-  const handleAddToCart = () => {
-    const STORAGE_KEY = 'b2b_cart_items'
-    const stored = localStorage.getItem(STORAGE_KEY)
-    let cartList: any[] = []
-    if (stored) {
-      try {
-        cartList = JSON.parse(stored)
-      } catch (e) {
-        console.error(e)
-      }
-    } else {
-      // If first time, initialize with default items first
-      cartList = [
-        {
-          key: '1',
-          id: '1',
-          image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=100&h=100&fit=crop',
-          name: '工业级电子元件批发 高品质芯片模块',
-          price: 45.0,
-          quantity: 100,
-        },
-        {
-          key: '2',
-          id: '2',
-          image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=100&h=100&fit=crop',
-          name: '高品质办公家具套装',
-          price: 500.0,
-          quantity: 10,
-        },
-      ]
-    }
+  // 动态解析多段面包屑
+  const categoryItems = product.category.split(' > ').map((catName) => ({
+    title: catName,
+  }))
 
-    const existingIndex = cartList.findIndex((item) => item.id === product.id)
-    const currentPrice = getCurrentPrice()
-    if (existingIndex > -1) {
-      cartList[existingIndex].quantity += quantity
-      cartList[existingIndex].price = currentPrice
-    } else {
-      cartList.push({
-        key: product.id,
-        id: product.id,
-        image: product.images[0],
-        name: product.name,
-        price: currentPrice,
-        quantity: quantity,
-      })
-    }
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(cartList))
-    window.dispatchEvent(new Event('cart_updated'))
-    message.success('已加入购物车')
-  }
-
-  const handleBuyNow = () => {
-    message.success('立即购买')
-    navigate('/checkout')
-  }
-
-  const handleContactSupplier = () => {
-    message.info('正在连接客服...')
-  }
+  const breadcrumbItems = [
+    { title: '首页', href: '/' },
+    ...categoryItems,
+    { title: product.name },
+  ]
 
   return (
     <Layout>
       <div className="product-detail-page">
         <div className="container">
-          {/* 面包屑导航 */}
-          <Breadcrumb
-            style={{ marginBottom: 24 }}
-            items={[
-              { title: '首页', href: '/' },
-              { title: '电子元器件', href: '/category/1' },
-              { title: '芯片', href: '/category/1' },
-              { title: product.name },
-            ]}
-          />
+          {/* 面包屑导航 - 跟随商品动态匹配 */}
+          <Breadcrumb style={{ marginBottom: 24 }} items={breadcrumbItems} />
 
           {/* 商品主要信息 */}
           <Row gutter={24}>
-            {/* 左侧：商品图片 */}
+            {/* 左侧：商品图片轮播组 */}
             <Col xs={24} md={10}>
               <Card className="image-gallery">
                 <Image.PreviewGroup>
                   <Image
                     src={product.images[currentImage]}
                     alt={product.name}
-                    style={{ borderRadius: 12 }}
+                    style={{ borderRadius: 12, width: '100%', objectFit: 'cover' }}
                   />
                 </Image.PreviewGroup>
                 <div className="image-thumbnails">
@@ -246,19 +105,19 @@ const ProductDetail = () => {
                       className={`thumbnail ${index === currentImage ? 'active' : ''}`}
                       onClick={() => setCurrentImage(index)}
                     >
-                      <img src={img} alt={`${product.name} ${index + 1}`} />
+                      <img src={img} alt={`${product.name} 缩略图 ${index + 1}`} />
                     </div>
                   ))}
                 </div>
               </Card>
             </Col>
 
-            {/* 右侧：商品信息 */}
+            {/* 右侧：商品下单交易与规格面板 */}
             <Col xs={24} md={14}>
               <Card>
                 <div className="product-header">
                   <h1 className="product-title">{product.name}</h1>
-                  <Space>
+                  <Space wrap>
                     {product.tags.map((tag) => (
                       <Tag key={tag} color="orange">
                         {tag}
@@ -274,15 +133,15 @@ const ProductDetail = () => {
                       <span style={{ marginLeft: 8 }}>{product.rating}</span>
                     </div>
                     <Divider type="vertical" />
-                    <span>销量: {product.sales}</span>
+                    <span>销量: {product.sales.toLocaleString()}</span>
                     <Divider type="vertical" />
-                    <span>评价: {product.reviews}</span>
+                    <span>评价: {product.reviews.toLocaleString()}</span>
                   </Space>
                 </div>
 
                 <Divider />
 
-                {/* 价格信息 */}
+                {/* 价格与总额估算看板 */}
                 <div className="price-section">
                   <div className="current-price">
                     <span className="label">当前单价:</span>
@@ -290,16 +149,16 @@ const ProductDetail = () => {
                     <span className="unit">/{product.unit}</span>
                   </div>
                   <div className="total-price">
-                    <span className="label">总价:</span>
+                    <span className="label">预计货款总额:</span>
                     <span className="price">
                       ¥{(getCurrentPrice() * quantity).toFixed(2)}
                     </span>
                   </div>
                 </div>
 
-                {/* 价格阶梯 */}
+                {/* 阶梯优惠定价 */}
                 <div className="price-levels">
-                  <h4>价格阶梯</h4>
+                  <h4>批发梯度定价</h4>
                   <Table
                     columns={priceLevelColumns}
                     dataSource={product.priceLevels}
@@ -311,20 +170,20 @@ const ProductDetail = () => {
 
                 <Divider />
 
-                {/* 库存信息 */}
+                {/* 品牌与库存基础状态 */}
                 <div className="stock-info">
                   <Row gutter={16}>
                     <Col span={12}>
                       <div className="info-item">
-                        <span className="label">库存:</span>
+                        <span className="label">现货库存:</span>
                         <span className="value" style={{ color: '#52c41a' }}>
-                          {product.stock} {product.unit}
+                          {product.stock.toLocaleString()} {product.unit}
                         </span>
                       </div>
                     </Col>
                     <Col span={12}>
                       <div className="info-item">
-                        <span className="label">品牌:</span>
+                        <span className="label">品牌/厂标:</span>
                         <span className="value">{product.brand}</span>
                       </div>
                     </Col>
@@ -333,16 +192,16 @@ const ProductDetail = () => {
 
                 <Divider />
 
-                {/* 规格选择 */}
+                {/* 动态规格选择 */}
                 {Object.keys(product.specs).length > 0 && (
                   <>
                     <div className="spec-selection">
                       {Object.entries(product.specs).map(([key, values]) => (
-                        <div key={key} className="spec-group">
-                          <span className="spec-label">
-                            {key === 'color' ? '颜色' : '容量'}:
+                        <div key={key} className="spec-group" style={{ marginBottom: 12 }}>
+                          <span className="spec-label" style={{ fontWeight: 500 }}>
+                            {key === 'color' ? '颜色款式' : (key === 'size' ? '规格尺寸' : (key === 'thickness' ? '纸张厚度' : key))}:
                           </span>
-                          <Space>
+                          <Space wrap>
                             {(values as string[]).map((value) => (
                               <Button
                                 key={value}
@@ -362,26 +221,26 @@ const ProductDetail = () => {
                   </>
                 )}
 
-                {/* 采购数量 */}
+                {/* 采购起订量与数量控制 */}
                 <div className="quantity-section">
                   <span className="label">采购数量:</span>
                   <InputNumber
                     min={product.priceLevels[0].minQuantity}
                     max={product.stock}
                     value={quantity}
-                    onChange={(val) => setQuantity(val || 1)}
+                    onChange={(val) => setQuantity(val || product.priceLevels[0].minQuantity)}
                     addonAfter={product.unit}
                     size="large"
-                    style={{ width: 200 }}
+                    style={{ width: 220 }}
                   />
                   <span style={{ marginLeft: 16, color: '#999' }}>
-                    起订量: {product.priceLevels[0].minQuantity} {product.unit}
+                    本款最低起订: {product.priceLevels[0].minQuantity} {product.unit}
                   </span>
                 </div>
 
                 <Divider />
 
-                {/* 操作按钮 */}
+                {/* B2B 核心行动点 */}
                 <div className="action-buttons">
                   <Space size="middle" style={{ width: '100%' }}>
                     <Button
@@ -391,10 +250,10 @@ const ProductDetail = () => {
                       onClick={handleAddToCart}
                       style={{ flex: 1 }}
                     >
-                      加入购物车
+                      加入采购清单
                     </Button>
                     <Button size="large" onClick={handleBuyNow} style={{ flex: 1 }}>
-                      立即采购
+                      立即订购
                     </Button>
                     <Button icon={<HeartOutlined />} size="large">
                       收藏
@@ -407,88 +266,108 @@ const ProductDetail = () => {
 
                 <Divider />
 
-                {/* 物流信息 */}
+                {/* 基础物流保障信息 */}
                 <div className="shipping-info">
                   <h4>
-                    <TruckOutlined /> 物流信息
+                    <TruckOutlined /> 交付与尾程物流
                   </h4>
-                  <Row gutter={[16, 8]}>
+                  <Row gutter={[16, 12]}>
                     <Col span={12}>
                       <EnvironmentOutlined style={{ marginRight: 8, color: '#1890ff' }} />
-                      发货地: {product.shipping.from}
+                      起运发货地: {product.shipping.from}
                     </Col>
                     <Col span={12}>
                       <TruckOutlined style={{ marginRight: 8, color: '#52c41a' }} />
-                      {product.shipping.deliveryTime}
+                      预计时效: {product.shipping.deliveryTime}
                     </Col>
-                    <Col span={12}>运费: {product.shipping.freight}</Col>
-                    <Col span={12}>预计到达: {product.shipping.estimatedArrival}</Col>
+                    <Col span={24}>
+                      <strong>头程/尾程运费:</strong> {product.shipping.freight}
+                    </Col>
+                    <Col span={24}>
+                      <strong>交货预计送达:</strong> {product.shipping.estimatedArrival}
+                    </Col>
                   </Row>
+
+                  {/* 大件商品增值白手套送装服务高亮 Banner */}
+                  {product.isLargeItem && (
+                    <div className="large-item-service-banner">
+                      <div className="banner-title">
+                        <GiftOutlined /> 大件专享「送装一体白手套服务」
+                      </div>
+                      <p>
+                        本件为大规格商品，支持我们自营的前置海外仓本地发货。尾程提供：<strong>送货上楼 + 入户拆包 + 专业组装 + 包装废弃物清理</strong>的一站式全链路尊享交付服务，免除买家自行拼装难题。
+                      </p>
+                    </div>
+                  )}
                 </div>
               </Card>
             </Col>
           </Row>
 
-          {/* 供应商信息卡片 */}
+          {/* 供应商信用与实力卡片 */}
           <Card style={{ marginTop: 24 }} className="supplier-card">
-            <Row gutter={24} align="middle">
-              <Col>
-                <Avatar src={product.supplier.logo} size={80} shape="square" />
+            <Row gutter={24} align="middle" justify="space-between">
+              <Col xs={24} md={18}>
+                <Row gutter={24} align="middle">
+                  <Col>
+                    <Avatar src={product.supplier.logo} size={80} shape="square" />
+                  </Col>
+                  <Col>
+                    <div className="supplier-name" style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <h3 style={{ margin: 0 }}>{product.supplier.name}</h3>
+                      {product.supplier.certified && (
+                        <Tag icon={<SafetyCertificateOutlined />} color="orange">
+                          源头验真企业
+                        </Tag>
+                      )}
+                    </div>
+                    <Space size="large" style={{ marginTop: 8 }} wrap>
+                      <div>
+                        供应商评分: <Rate disabled defaultValue={product.supplier.rating} allowHalf />
+                        <span style={{ marginLeft: 8 }}>{product.supplier.rating}</span>
+                      </div>
+                      <Divider type="vertical" />
+                      <span>在售商品: {product.supplier.productCount}款</span>
+                      <Divider type="vertical" />
+                      <span>
+                        <EnvironmentOutlined /> {product.supplier.location}
+                      </span>
+                    </Space>
+                    <div style={{ marginTop: 8, color: '#666' }}>
+                      <Space size="large">
+                        <span>平均询盘响应率: {product.supplier.responseRate}%</span>
+                        <span>平均响应时效: {product.supplier.responseTime}</span>
+                      </Space>
+                    </div>
+                  </Col>
+                </Row>
               </Col>
-              <Col flex="auto">
-                <div className="supplier-name">
-                  <h3>{product.supplier.name}</h3>
-                  {product.supplier.certified && (
-                    <Tag icon={<SafetyCertificateOutlined />} color="orange">
-                      官方认证
-                    </Tag>
-                  )}
-                </div>
-                <Space size="large" style={{ marginTop: 8 }}>
-                  <div>
-                    <Rate disabled defaultValue={product.supplier.rating} allowHalf />
-                    <span style={{ marginLeft: 8 }}>{product.supplier.rating}</span>
-                  </div>
-                  <Divider type="vertical" />
-                  <span>商品数: {product.supplier.productCount}</span>
-                  <Divider type="vertical" />
-                  <span>
-                    <EnvironmentOutlined /> {product.supplier.location}
-                  </span>
-                </Space>
-                <div style={{ marginTop: 8, color: '#666' }}>
-                  <Space size="large">
-                    <span>响应率: {product.supplier.responseRate}%</span>
-                    <span>响应时间: {product.supplier.responseTime}</span>
-                  </Space>
-                </div>
-              </Col>
-              <Col>
-                <Space direction="vertical">
+              <Col xs={24} md={6} style={{ textAlign: 'right', marginTop: 12 }}>
+                <Space direction="vertical" style={{ width: '100%' }}>
                   <Button
                     type="primary"
                     icon={<ShopOutlined />}
                     onClick={() => navigate(`/supplier-shop/${product.supplier.id}`)}
                     block
                   >
-                    进入店铺
+                    进入商家店铺
                   </Button>
                   <Button icon={<PhoneOutlined />} onClick={handleContactSupplier} block>
-                    联系供应商
+                    联系在线客服/代表
                   </Button>
                 </Space>
               </Col>
             </Row>
           </Card>
 
-          {/* 商品详情Tabs */}
+          {/* 详情与参数折叠选项卡 */}
           <Card style={{ marginTop: 24 }}>
             <Tabs
               defaultActiveKey="detail"
               items={[
                 {
                   key: 'detail',
-                  label: '商品详情',
+                  label: '图文详情说明',
                   children: (
                     <div
                       className="product-description"
@@ -498,12 +377,12 @@ const ProductDetail = () => {
                 },
                 {
                   key: 'specs',
-                  label: '规格参数',
+                  label: '规格性能参数',
                   children: (
                     <Table
                       columns={[
-                        { title: '参数名称', dataIndex: 'name', key: 'name', width: 200 },
-                        { title: '参数值', dataIndex: 'value', key: 'value' },
+                        { title: '参数名称', dataIndex: 'name', key: 'name', width: 250 },
+                        { title: '测量参数值/执行标准', dataIndex: 'value', key: 'value' },
                       ]}
                       dataSource={product.specifications}
                       pagination={false}
@@ -514,10 +393,10 @@ const ProductDetail = () => {
                 },
                 {
                   key: 'afterSales',
-                  label: '售后保障',
+                  label: '平台售后保障',
                   children: (
                     <div className="after-sales">
-                      <h3>售后服务</h3>
+                      <h3>售后承诺</h3>
                       <Space direction="vertical" size="middle" style={{ width: '100%' }}>
                         {product.afterSales.map((item, index) => (
                           <div key={index} className="service-item">
@@ -529,15 +408,11 @@ const ProductDetail = () => {
                         ))}
                       </Space>
                       <Divider />
-                      <h3>退换货政策</h3>
+                      <h3>大宗/大件特殊退换货政策说明</h3>
                       <p style={{ lineHeight: 1.8, color: '#666' }}>
-                        1. 商品签收后7天内，如有质量问题可申请退换货；
-                        <br />
-                        2. 退换货商品必须保持原包装完整，不影响二次销售；
-                        <br />
-                        3. 定制商品不支持退换货；
-                        <br />
-                        4. 退换货运费由责任方承担。
+                        1. <strong>常规包装商品</strong>：签收后7天内，如因质量问题可支持无理由退换货，运费由发货方承担。<br />
+                        2. <strong>大件定制或打木架商品</strong>：除非运输发生破损导致不可用（已投保全程货运破损险），否则一旦起运不支持中途截回或无故退货。如发生破损，平台将协助大件海外仓快速换新或上门修缮。<br />
+                        3. <strong>非质量退货</strong>：买家需自行联系大件托运渠道，并承担退回到对应大件前置海外仓的全部双程运费与包装恢复费。
                       </p>
                     </div>
                   ),
@@ -546,8 +421,8 @@ const ProductDetail = () => {
             />
           </Card>
 
-          {/* 推荐商品 */}
-          <Card title="该供应商的其他商品" style={{ marginTop: 24 }}>
+          {/* 关联商品推荐 */}
+          <Card title="该供应商的其它精选货源推荐" style={{ marginTop: 24 }}>
             <Row gutter={[16, 16]}>
               {Array(4)
                 .fill(null)
@@ -566,18 +441,18 @@ const ProductDetail = () => {
                               '1484480974693-6ca0a78fb36b',
                             ][i]
                           }?w=300&h=300&fit=crop`}
-                          alt={`推荐商品 ${i + 1}`}
+                          alt={`推荐商品图片 ${i + 1}`}
                         />
                       }
                       onClick={() => navigate(`/product/${i + 1}`)}
                     >
                       <div className="product-name">
-                        工业级{['电子元件', '芯片模块', '传感器', '电阻电容'][i]}
+                        B2B供货{['智能电控核心', '精工耐磨传动', '原厂级传感器', '专业耗材组件'][i]}
                       </div>
                       <div className="product-price">
-                        ¥{(Math.random() * 100 + 10).toFixed(2)}
+                        ¥{(Math.random() * 150 + 45).toFixed(2)}
                       </div>
-                      <div className="product-sales">销量: {Math.floor(Math.random() * 5000)}</div>
+                      <div className="product-sales">近期出货量: {Math.floor(Math.random() * 3000 + 500)}</div>
                     </Card>
                   </Col>
                 ))}
@@ -590,4 +465,3 @@ const ProductDetail = () => {
 }
 
 export default ProductDetail
-
