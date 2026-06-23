@@ -69,11 +69,52 @@
   "categories": {
     "title": "商品分类",
     "subtitle": "探索我们跨多个行业的全面B2B产品系列",
-    "searchPlaceholder": "搜索分类...",
+    "searchPlaceholder": "搜索分类名称或子类别...",
     "totalCategories": "个分类",
     "totalProducts": "件商品",
     "products": "件商品",
-    "noResults": "未找到分类"
+    "noResults": "未找到分类",
+    "filters": "筛选条件",
+    "allSectors": "全部行业",
+    "sector": "行业领域",
+    "productRange": "商品数量",
+    "sortBy": "排序方式",
+    "reset": "重置筛选",
+    "all": "全部",
+    "rangeUnder5k": "5,000 件以下",
+    "range5kTo10k": "5,000 - 10,000 件",
+    "range10kTo15k": "10,000 - 15,000 件",
+    "rangeOver15k": "15,000 件以上",
+    "sortDefault": "默认排序",
+    "sortCountDesc": "商品数量：从多到少",
+    "sortCountAsc": "商品数量：从少到多",
+    "sortNameAsc": "分类名称：A - Z",
+    "moq": "起订量要求",
+    "allMoq": "不限起订量",
+    "moqUnder10": "10 件及以下 (小额批发)",
+    "moqUnder50": "50 件及以下 (中等批量)",
+    "moqOver50": "50 件以上 (大额起订)",
+    "supplierType": "供应商",
+    "services": "特殊服务",
+    "moreFilters": "高级筛选",
+    "lessFilters": "收起筛选",
+    "sectors": {
+      "industrial": "工业制造",
+      "consumer": "消费生活",
+      "tech": "科技与通信",
+      "business": "商业与包装"
+    },
+    "suppliers": {
+      "verified": "已认证企业",
+      "factory": "源头工厂",
+      "gold": "金牌供应商"
+    },
+    "serviceItems": {
+      "warehouse": "海外仓直发",
+      "installation": "送装一体",
+      "sample": "支持样品",
+      "fast": "24h 极速发货"
+    }
   },
   "warehouse": {
     "title": "全球仓储网络",

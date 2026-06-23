@@ -69,11 +69,52 @@
   "categories": {
     "title": "Product Categories",
     "subtitle": "Explore our comprehensive range of B2B products across multiple industries",
-    "searchPlaceholder": "Search categories...",
+    "searchPlaceholder": "Search categories or subcategories...",
     "totalCategories": "Categories",
     "totalProducts": "Total Products",
     "products": "Products",
-    "noResults": "No categories found"
+    "noResults": "No categories found",
+    "filters": "Filters",
+    "allSectors": "All Sectors",
+    "sector": "Industry Sector",
+    "productRange": "Product Count",
+    "sortBy": "Sort By",
+    "reset": "Reset Filters",
+    "all": "All",
+    "rangeUnder5k": "Under 5,000",
+    "range5kTo10k": "5,000 - 10,000",
+    "range10kTo15k": "10,000 - 15,000",
+    "rangeOver15k": "Over 15,000",
+    "sortDefault": "Default",
+    "sortCountDesc": "Count: High to Low",
+    "sortCountAsc": "Count: Low to High",
+    "sortNameAsc": "Name: A - Z",
+    "moq": "MOQ Limit",
+    "allMoq": "All MOQs",
+    "moqUnder10": "10 Units & Under",
+    "moqUnder50": "50 Units & Under",
+    "moqOver50": "Over 50 Units",
+    "supplierType": "Supplier",
+    "services": "Special Services",
+    "moreFilters": "Advanced Filters",
+    "lessFilters": "Collapse Filters",
+    "sectors": {
+      "industrial": "Industrial & Mfg",
+      "consumer": "Consumer Goods",
+      "tech": "Tech & Comm",
+      "business": "Business & Packaging"
+    },
+    "suppliers": {
+      "verified": "Verified Merchant",
+      "factory": "Source Factory",
+      "gold": "Gold Supplier"
+    },
+    "serviceItems": {
+      "warehouse": "Overseas Warehouse",
+      "installation": "White Glove",
+      "sample": "Samples Ready",
+      "fast": "24h Dispatch"
+    }
   },
   "warehouse": {
     "title": "Global Warehouse Network",

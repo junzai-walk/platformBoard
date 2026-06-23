@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 export interface CategoryItem {
@@ -9,6 +9,10 @@ export interface CategoryItem {
   count: number
   color: string
   subcategories: string[]
+  sector: 'industrial' | 'consumer' | 'tech' | 'business'
+  moq: number
+  supplierTypes: ('verified' | 'factory' | 'gold')[]
+  services: ('warehouse' | 'installation' | 'sample' | 'fast')[]
 }
 
 const initialCategories: CategoryItem[] = [
@@ -18,8 +22,12 @@ const initialCategories: CategoryItem[] = [
     nameZh: '电子元器件',
     image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=300&fit=crop&q=80',
     count: 15680,
-    color: '#1890ff',
-    subcategories: ['Semiconductors', 'Capacitors', 'Resistors', 'Integrated Circuits']
+    color: '#0d9488',
+    subcategories: ['Semiconductors', 'Capacitors', 'Resistors', 'Integrated Circuits'],
+    sector: 'tech',
+    moq: 100,
+    supplierTypes: ['verified', 'gold'],
+    services: ['warehouse', 'fast']
   },
   {
     id: 2,
@@ -28,7 +36,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1581092160562-40aa08e78837?w=300&h=300&fit=crop&q=80',
     count: 12450,
     color: '#722ed1',
-    subcategories: ['CNC Machines', 'Pumps', 'Compressors', 'Motors']
+    subcategories: ['CNC Machines', 'Pumps', 'Compressors', 'Motors'],
+    sector: 'industrial',
+    moq: 1,
+    supplierTypes: ['factory', 'verified'],
+    services: ['installation', 'sample']
   },
   {
     id: 3,
@@ -37,7 +49,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=300&h=300&fit=crop&q=80',
     count: 18920,
     color: '#52c41a',
-    subcategories: ['Hand Tools', 'Power Tools', 'Fasteners', 'Abrasives']
+    subcategories: ['Hand Tools', 'Power Tools', 'Fasteners', 'Abrasives'],
+    sector: 'industrial',
+    moq: 50,
+    supplierTypes: ['factory', 'gold'],
+    services: ['warehouse', 'sample', 'fast']
   },
   {
     id: 4,
@@ -46,7 +62,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&h=300&fit=crop&q=80',
     count: 8760,
     color: '#fa8c16',
-    subcategories: ['Polymers', 'Solvents', 'Adhesives', 'Coatings']
+    subcategories: ['Polymers', 'Solvents', 'Adhesives', 'Coatings'],
+    sector: 'industrial',
+    moq: 10,
+    supplierTypes: ['verified'],
+    services: ['fast']
   },
   {
     id: 5,
@@ -55,7 +75,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1503387762-592deb58ef4e?w=300&h=300&fit=crop&q=80',
     count: 11340,
     color: '#eb2f96',
-    subcategories: ['Steel', 'Cement', 'Lumber', 'Insulation']
+    subcategories: ['Steel', 'Cement', 'Lumber', 'Insulation'],
+    sector: 'industrial',
+    moq: 20,
+    supplierTypes: ['factory', 'verified'],
+    services: ['installation', 'warehouse']
   },
   {
     id: 6,
@@ -64,7 +88,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=300&h=300&fit=crop&q=80',
     count: 14200,
     color: '#13c2c2',
-    subcategories: ['Stationery', 'Furniture', 'Printers', 'Paper Products']
+    subcategories: ['Stationery', 'Furniture', 'Printers', 'Paper Products'],
+    sector: 'business',
+    moq: 5,
+    supplierTypes: ['verified', 'gold'],
+    services: ['warehouse', 'sample', 'fast']
   },
   {
     id: 7,
@@ -73,7 +101,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=300&h=300&fit=crop&q=80',
     count: 9870,
     color: '#2f54eb',
-    subcategories: ['Boxes', 'Bags', 'Bottles', 'Labels']
+    subcategories: ['Boxes', 'Bags', 'Bottles', 'Labels'],
+    sector: 'business',
+    moq: 500,
+    supplierTypes: ['factory'],
+    services: ['sample']
   },
   {
     id: 8,
@@ -82,7 +114,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1489987707025-afc232f7ea0f?w=300&h=300&fit=crop&q=80',
     count: 22500,
     color: '#faad14',
-    subcategories: ['Fabrics', 'Garments', 'Accessories', 'Footwear']
+    subcategories: ['Fabrics', 'Garments', 'Accessories', 'Footwear'],
+    sector: 'consumer',
+    moq: 10,
+    supplierTypes: ['factory', 'gold'],
+    services: ['warehouse', 'sample', 'fast']
   },
   {
     id: 9,
@@ -91,7 +127,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=300&h=300&fit=crop&q=80',
     count: 16800,
     color: '#f5222d',
-    subcategories: ['Furniture', 'Decor', 'Kitchenware', 'Garden Tools']
+    subcategories: ['Furniture', 'Decor', 'Kitchenware', 'Garden Tools'],
+    sector: 'consumer',
+    moq: 2,
+    supplierTypes: ['verified', 'factory'],
+    services: ['warehouse', 'installation', 'sample']
   },
   {
     id: 10,
@@ -100,7 +140,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1542838132-92c53300491e?w=300&h=300&fit=crop&q=80',
     count: 10500,
     color: '#fa541c',
-    subcategories: ['Snacks', 'Beverages', 'Ingredients', 'Supplements']
+    subcategories: ['Snacks', 'Beverages', 'Ingredients', 'Supplements'],
+    sector: 'consumer',
+    moq: 10,
+    supplierTypes: ['verified', 'gold'],
+    services: ['warehouse', 'fast']
   },
   {
     id: 11,
@@ -109,7 +153,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1584982751601-97dcc096659c?w=300&h=300&fit=crop&q=80',
     count: 6890,
     color: '#1890ff',
-    subcategories: ['Diagnostic', 'Surgical', 'Monitoring', 'Consumables']
+    subcategories: ['Diagnostic', 'Surgical', 'Monitoring', 'Consumables'],
+    sector: 'tech',
+    moq: 1,
+    supplierTypes: ['verified', 'gold'],
+    services: ['fast', 'sample']
   },
   {
     id: 12,
@@ -118,7 +166,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=300&h=300&fit=crop&q=80',
     count: 13600,
     color: '#722ed1',
-    subcategories: ['Engine Parts', 'Brakes', 'Filters', 'Accessories']
+    subcategories: ['Engine Parts', 'Brakes', 'Filters', 'Accessories'],
+    sector: 'tech',
+    moq: 5,
+    supplierTypes: ['factory', 'verified'],
+    services: ['warehouse', 'fast']
   },
   {
     id: 13,
@@ -127,7 +179,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=300&h=300&fit=crop&q=80',
     count: 8340,
     color: '#faad14',
-    subcategories: ['LED Lights', 'Fixtures', 'Switches', 'Cables']
+    subcategories: ['LED Lights', 'Fixtures', 'Switches', 'Cables'],
+    sector: 'tech',
+    moq: 20,
+    supplierTypes: ['factory', 'gold'],
+    services: ['warehouse', 'sample', 'fast']
   },
   {
     id: 14,
@@ -136,7 +192,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=300&h=300&fit=crop&q=80',
     count: 7120,
     color: '#52c41a',
-    subcategories: ['Cameras', 'Alarms', 'Access Control', 'Safety Gear']
+    subcategories: ['Cameras', 'Alarms', 'Access Control', 'Safety Gear'],
+    sector: 'tech',
+    moq: 5,
+    supplierTypes: ['verified', 'gold'],
+    services: ['installation', 'warehouse', 'fast']
   },
   {
     id: 15,
@@ -145,7 +205,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1532996122724-e3c354a0b15b?w=300&h=300&fit=crop&q=80',
     count: 5450,
     color: '#13c2c2',
-    subcategories: ['Water Treatment', 'Air Purification', 'Waste Management', 'Solar Panels']
+    subcategories: ['Water Treatment', 'Air Purification', 'Waste Management', 'Solar Panels'],
+    sector: 'industrial',
+    moq: 1,
+    supplierTypes: ['factory'],
+    services: ['installation']
   },
   {
     id: 16,
@@ -154,7 +218,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1574943320219-553eb213f72d?w=300&h=300&fit=crop&q=80',
     count: 9230,
     color: '#52c41a',
-    subcategories: ['Seeds', 'Fertilizers', 'Equipment', 'Irrigation']
+    subcategories: ['Seeds', 'Fertilizers', 'Equipment', 'Irrigation'],
+    sector: 'business',
+    moq: 50,
+    supplierTypes: ['verified'],
+    services: ['warehouse', 'sample']
   },
   {
     id: 17,
@@ -163,7 +231,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=300&fit=crop&q=80',
     count: 12780,
     color: '#eb2f96',
-    subcategories: ['Cosmetics', 'Skincare', 'Hair Care', 'Fragrances']
+    subcategories: ['Cosmetics', 'Skincare', 'Hair Care', 'Fragrances'],
+    sector: 'consumer',
+    moq: 10,
+    supplierTypes: ['verified', 'gold'],
+    services: ['warehouse', 'sample', 'fast']
   },
   {
     id: 18,
@@ -172,7 +244,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=300&h=300&fit=crop&q=80',
     count: 11450,
     color: '#fa8c16',
-    subcategories: ['Fitness Equipment', 'Outdoor Gear', 'Team Sports', 'Water Sports']
+    subcategories: ['Fitness Equipment', 'Outdoor Gear', 'Team Sports', 'Water Sports'],
+    sector: 'consumer',
+    moq: 5,
+    supplierTypes: ['factory', 'gold'],
+    services: ['warehouse', 'sample', 'fast']
   },
   {
     id: 19,
@@ -181,7 +257,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1558060370-d644479cb6f7?w=300&h=300&fit=crop&q=80',
     count: 9870,
     color: '#1890ff',
-    subcategories: ['Educational Toys', 'Action Figures', 'Model Kits', 'Collectibles']
+    subcategories: ['Educational Toys', 'Action Figures', 'Model Kits', 'Collectibles'],
+    sector: 'consumer',
+    moq: 12,
+    supplierTypes: ['verified', 'gold'],
+    services: ['warehouse', 'sample']
   },
   {
     id: 20,
@@ -190,7 +270,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=300&h=300&fit=crop&q=80',
     count: 7650,
     color: '#52c41a',
-    subcategories: ['Pet Food', 'Accessories', 'Grooming', 'Healthcare']
+    subcategories: ['Pet Food', 'Accessories', 'Grooming', 'Healthcare'],
+    sector: 'consumer',
+    moq: 4,
+    supplierTypes: ['factory', 'verified'],
+    services: ['warehouse', 'sample', 'fast']
   },
   {
     id: 21,
@@ -199,7 +283,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=300&h=300&fit=crop&q=80',
     count: 10230,
     color: '#eb2f96',
-    subcategories: ['Necklaces', 'Bracelets', 'Rings', 'Watches']
+    subcategories: ['Necklaces', 'Bracelets', 'Rings', 'Watches'],
+    sector: 'consumer',
+    moq: 5,
+    supplierTypes: ['verified', 'gold'],
+    services: ['fast', 'sample']
   },
   {
     id: 22,
@@ -208,7 +296,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=300&h=300&fit=crop&q=80',
     count: 8940,
     color: '#722ed1',
-    subcategories: ['Backpacks', 'Suitcases', 'Handbags', 'Wallets']
+    subcategories: ['Backpacks', 'Suitcases', 'Handbags', 'Wallets'],
+    sector: 'consumer',
+    moq: 8,
+    supplierTypes: ['factory', 'gold'],
+    services: ['warehouse', 'sample', 'fast']
   },
   {
     id: 23,
@@ -217,7 +309,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&q=80',
     count: 6540,
     color: '#13c2c2',
-    subcategories: ['Commercial Printing', 'Labels', 'Books', 'Magazines']
+    subcategories: ['Commercial Printing', 'Labels', 'Books', 'Magazines'],
+    sector: 'business',
+    moq: 100,
+    supplierTypes: ['factory'],
+    services: ['sample']
   },
   {
     id: 24,
@@ -226,7 +322,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=300&h=300&fit=crop&q=80',
     count: 9120,
     color: '#2f54eb',
-    subcategories: ['Mobile Phones', 'Networking', 'Antennas', 'Cables']
+    subcategories: ['Mobile Phones', 'Networking', 'Antennas', 'Cables'],
+    sector: 'tech',
+    moq: 5,
+    supplierTypes: ['verified', 'gold'],
+    services: ['warehouse', 'fast']
   },
   {
     id: 25,
@@ -235,7 +335,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1473341304170-971dccb5ac1e?w=300&h=300&fit=crop&q=80',
     count: 7890,
     color: '#faad14',
-    subcategories: ['Generators', 'Batteries', 'Solar Systems', 'Transformers']
+    subcategories: ['Generators', 'Batteries', 'Solar Systems', 'Transformers'],
+    sector: 'industrial',
+    moq: 1,
+    supplierTypes: ['factory', 'verified'],
+    services: ['installation', 'warehouse']
   },
   {
     id: 26,
@@ -244,7 +348,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1614624532983-4ce03382d63d?w=300&h=300&fit=crop&q=80',
     count: 10560,
     color: '#fa8c16',
-    subcategories: ['Plastic Raw Materials', 'Rubber Products', 'Foam', 'Sheets']
+    subcategories: ['Plastic Raw Materials', 'Rubber Products', 'Foam', 'Sheets'],
+    sector: 'industrial',
+    moq: 200,
+    supplierTypes: ['factory'],
+    services: ['sample']
   },
   {
     id: 27,
@@ -253,7 +361,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1565688534245-05d6b5be184a?w=300&h=300&fit=crop&q=80',
     count: 8230,
     color: '#1890ff',
-    subcategories: ['Steel', 'Aluminum', 'Copper', 'Minerals']
+    subcategories: ['Steel', 'Aluminum', 'Copper', 'Minerals'],
+    sector: 'industrial',
+    moq: 10,
+    supplierTypes: ['verified'],
+    services: ['fast']
   },
   {
     id: 28,
@@ -262,7 +374,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=300&h=300&fit=crop&q=80',
     count: 12340,
     color: '#eb2f96',
-    subcategories: ['Promotional Items', 'Handicrafts', 'Souvenirs', 'Holiday Decor']
+    subcategories: ['Promotional Items', 'Handicrafts', 'Souvenirs', 'Holiday Decor'],
+    sector: 'consumer',
+    moq: 15,
+    supplierTypes: ['factory', 'gold'],
+    services: ['warehouse', 'sample']
   },
   {
     id: 29,
@@ -271,7 +387,11 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=300&h=300&fit=crop&q=80',
     count: 11780,
     color: '#722ed1',
-    subcategories: ['Office Furniture', 'Home Furniture', 'Outdoor Furniture', 'Fixtures']
+    subcategories: ['Office Furniture', 'Home Furniture', 'Outdoor Furniture', 'Fixtures'],
+    sector: 'business',
+    moq: 1,
+    supplierTypes: ['factory', 'verified'],
+    services: ['warehouse', 'installation']
   },
   {
     id: 30,
@@ -280,52 +400,121 @@ const initialCategories: CategoryItem[] = [
     image: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=300&h=300&fit=crop&q=80',
     count: 6920,
     color: '#52c41a',
-    subcategories: ['Testing Equipment', 'Sensors', 'Meters', 'Lab Instruments']
-  },
+    subcategories: ['Testing Equipment', 'Sensors', 'Meters', 'Lab Instruments'],
+    sector: 'industrial',
+    moq: 2,
+    supplierTypes: ['verified', 'gold'],
+    services: ['sample', 'fast']
+  }
 ]
 
 export const useCategories = () => {
   const { i18n } = useTranslation()
   const [searchTerm, setSearchTerm] = useState('')
-  const [columnsCount, setColumnsCount] = useState(4)
-
-  useEffect(() => {
-    const updateColumns = () => {
-      const width = window.innerWidth
-      if (width > 1200) setColumnsCount(4)
-      else if (width > 900) setColumnsCount(3)
-      else if (width > 576) setColumnsCount(2)
-      else setColumnsCount(1)
-    }
-    updateColumns()
-    window.addEventListener('resize', updateColumns)
-    return () => window.removeEventListener('resize', updateColumns)
-  }, [])
+  const [selectedSector, setSelectedSector] = useState<string>('all')
+  const [productRange, setProductRange] = useState<string>('all')
+  const [sortBy, setSortBy] = useState<string>('default')
+  
+  // Advanced filters state
+  const [moqFilter, setMoqFilter] = useState<string>('all')
+  const [selectedSupplierTypes, setSelectedSupplierTypes] = useState<string[]>([])
+  const [selectedServices, setSelectedServices] = useState<string[]>([])
 
   const filteredCategories = initialCategories.filter(cat => {
+    // 1. Name and subcategory search
     const name = i18n.language === 'en-US' ? cat.nameEn : cat.nameZh
-    return name.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+      cat.subcategories.some(sub => sub.toLowerCase().includes(searchTerm.toLowerCase()))
+
+    // 2. Sector filter
+    const matchesSector = selectedSector === 'all' || cat.sector === selectedSector
+
+    // 3. Product Range filter
+    let matchesRange = true
+    if (productRange === 'under5k') {
+      matchesRange = cat.count < 5000
+    } else if (productRange === '5kTo10k') {
+      matchesRange = cat.count >= 5000 && cat.count <= 10000
+    } else if (productRange === '10kTo15k') {
+      matchesRange = cat.count >= 10000 && cat.count <= 15000
+    } else if (productRange === 'over15k') {
+      matchesRange = cat.count > 15000
+    }
+
+    // 4. MOQ filter
+    let matchesMoq = true
+    if (moqFilter === 'under10') {
+      matchesMoq = cat.moq <= 10
+    } else if (moqFilter === 'under50') {
+      matchesMoq = cat.moq <= 50
+    } else if (moqFilter === 'over50') {
+      matchesMoq = cat.moq > 50
+    }
+
+    // 5. Supplier types filter (category contains all selected types)
+    const matchesSupplier = selectedSupplierTypes.length === 0 || 
+      selectedSupplierTypes.every(type => cat.supplierTypes.includes(type as any))
+
+    // 6. Services filter (category contains all selected services)
+    const matchesServices = selectedServices.length === 0 || 
+      selectedServices.every(service => cat.services.includes(service as any))
+
+    return matchesSearch && matchesSector && matchesRange && matchesMoq && matchesSupplier && matchesServices
   })
 
-  // Distribute items to columns left-to-right (round-robin)
-  const columns = Array.from({ length: columnsCount }, (): CategoryItem[] => [])
-  filteredCategories.forEach((cat, index) => {
-    columns[index % columnsCount].push(cat)
+  // Sorting
+  const sortedCategories = [...filteredCategories].sort((a, b) => {
+    if (sortBy === 'countDesc') {
+      return b.count - a.count
+    } else if (sortBy === 'countAsc') {
+      return a.count - b.count
+    } else if (sortBy === 'nameAsc') {
+      const nameA = i18n.language === 'en-US' ? a.nameEn : a.nameZh
+      const nameB = i18n.language === 'en-US' ? b.nameEn : b.nameZh
+      return nameA.localeCompare(nameB, i18n.language)
+    }
+    return 0 // default order (by ID)
   })
 
-  const getImageHeight = (id: number) => {
-    const heights = [180, 240, 200, 260, 220, 280]
-    return heights[id % heights.length]
+  const resetFilters = () => {
+    setSearchTerm('')
+    setSelectedSector('all')
+    setProductRange('all')
+    setSortBy('default')
+    setMoqFilter('all')
+    setSelectedSupplierTypes([])
+    setSelectedServices([])
   }
+
+  const isFiltered = searchTerm !== '' || 
+    selectedSector !== 'all' || 
+    productRange !== 'all' || 
+    sortBy !== 'default' ||
+    moqFilter !== 'all' ||
+    selectedSupplierTypes.length > 0 ||
+    selectedServices.length > 0
 
   return {
     searchTerm,
     setSearchTerm,
-    columnsCount,
-    columns,
-    getImageHeight,
-    filteredCategoriesCount: filteredCategories.length,
+    selectedSector,
+    setSelectedSector,
+    productRange,
+    setProductRange,
+    sortBy,
+    setSortBy,
+    moqFilter,
+    setMoqFilter,
+    selectedSupplierTypes,
+    setSelectedSupplierTypes,
+    selectedServices,
+    setSelectedServices,
+    filteredCategories: sortedCategories,
+    resetFilters,
+    isFiltered,
+    filteredCategoriesCount: sortedCategories.length,
     totalProductsCount: initialCategories.reduce((sum, cat) => sum + cat.count, 0),
     language: i18n.language
   }
 }
+
