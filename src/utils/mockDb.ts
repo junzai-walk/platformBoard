@@ -1,67 +1,59 @@
-import { useState, useEffect } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
-import { message } from 'antd'
-import { mockDb } from '../utils/mockDb'
+import { ProductDetailItem } from '../hooks/useProductDetail'
 
-export interface PriceLevel {
-  minQuantity: number
-  maxQuantity: number | null
+export interface OrderItem {
+  productId: string
+  name: string
+  image: string
   price: number
-}
-
-export interface SpecOptions {
-  [key: string]: string[]
-}
-
-export interface ShippingInfo {
-  from: string
-  deliveryTime: string
-  freight: string
-  estimatedArrival: string
-}
-
-export interface SupplierInfo {
-  id: string
-  name: string
-  logo: string
-  rating: number
-  productCount: number
-  certified: boolean
-  location: string
-  responseRate: number
-  responseTime: string
-}
-
-export interface SpecificationItem {
-  name: string
-  value: string
-}
-
-export interface ProductDetailItem {
-  id: string
-  name: string
-  images: string[]
-  category: string
-  brand: string
-  model: string
+  quantity: number
   unit: string
-  stock: number
-  sales: number
-  rating: number
-  reviews: number
-  tags: string[]
-  isLargeItem?: boolean
-  priceLevels: PriceLevel[]
-  specs: SpecOptions
-  shipping: ShippingInfo
-  supplier: SupplierInfo
-  description: string
-  specifications: SpecificationItem[]
-  afterSales: string[]
+  spec: { [key: string]: string }
 }
 
-// 模拟的12个与主页爆品对应的完整商品数据库
-export const productsDb: ProductDetailItem[] = [
+export interface Order {
+  key: string
+  orderNo: string
+  supplierId: string
+  supplierName: string
+  distributorId: string
+  distributorName: string
+  amount: number
+  status: '待付款' | '待发货' | '已发货' | '已完成'
+  createTime: string
+  shippingDetails?: {
+    carrier: string
+    trackingNo: string
+    shippedTime?: string
+  }
+  address: string
+  contact: string
+  phone: string
+  items: OrderItem[]
+}
+
+export interface Address {
+  id: number
+  name: string
+  phone: string
+  province: string
+  city: string
+  district: string
+  detail: string
+  postalCode?: string
+  isDefault: boolean
+}
+
+// LocalStorage Keys
+const KEYS = {
+  PRODUCTS: 'b2b_db_products',
+  ORDERS: 'b2b_db_orders',
+  ADDRESSES: 'b2b_db_addresses',
+  FAVORITES: 'b2b_db_favorites',
+  CART: 'b2b_cart_items',
+}
+
+// 默认 12 个商品，与原 useProductDetail 库保持一致
+const defaultProducts: ProductDetailItem[] = [
   {
     id: '1',
     name: '工业级电子元件批发 高品质芯片模块',
@@ -126,7 +118,7 @@ export const productsDb: ProductDetailItem[] = [
   {
     id: '2',
     name: '高品质办公家具套装 实木会议桌椅组合',
-    isLargeItem: true, // 标记为大件商品
+    isLargeItem: true,
     images: [
       'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&h=600&fit=crop',
       'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&h=600&fit=crop',
@@ -382,7 +374,7 @@ export const productsDb: ProductDetailItem[] = [
     },
     description: `
       <h3>一把好工具，相伴一辈子</h3>
-      <p>工具箱精选铬钒钢（CR-V）高韧度锻造，整体经过二次淬火热处理，防锈抗腐蚀，扭矩大，是工业车间生产和家装的可靠伙伴。</p>
+      <p>工具箱精选铬钒钢（CR-V）高韧度锻造，整体经过二次淬火热处理，防锈抗腐蚀，扭矩大，是工业车间生产 and 家装的可靠伙伴。</p>
     `,
     specifications: [
       { name: '硬度级别', value: 'HRC 58-62' },
@@ -393,7 +385,7 @@ export const productsDb: ProductDetailItem[] = [
   {
     id: '7',
     name: '高强度热轧建筑钢材 建筑螺纹钢批发',
-    isLargeItem: true, // 标记为大件商品
+    isLargeItem: true,
     images: [
       'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=600&h=600&fit=crop',
     ],
@@ -433,7 +425,7 @@ export const productsDb: ProductDetailItem[] = [
     },
     description: `
       <h3>精工大厂 · 国之重器</h3>
-      <p>鞍山钢铁集团原厂出产，HRB400E高强抗震螺纹钢。执行最新GB/T 1499.2-2018国家标准，抗拉强度稳定，完美适配各类高层民建及大型桥梁基建工程。</p>
+      <p>鞍山钢铁集团原厂出产，HRB400E高强抗震螺纹钢。执行最新GB/T 1499.2-2018国家标准，抗拉强度稳定。</p>
     `,
     specifications: [
       { name: '牌号', value: 'HRB400E (抗震螺纹钢)' },
@@ -484,7 +476,7 @@ export const productsDb: ProductDetailItem[] = [
     },
     description: `
       <h3>安全呵护 · 自由呼吸</h3>
-      <p>执行国家YY/T 0969-2013标准，采用亲肤无纺布与99级超细高密熔喷布制造，细菌过滤效率（BFE）≥95%，低阻透气不勒耳。</p>
+      <p>执行国家YY/T 0969-2013标准，采用亲肤无纺布与99级超细高密熔喷布制造。</p>
     `,
     specifications: [
       { name: '执行标准', value: 'YY/T 0969-2013' },
@@ -535,7 +527,7 @@ export const productsDb: ProductDetailItem[] = [
     },
     description: `
       <h3>24小时全景守护，安全尽在掌控</h3>
-      <p>400万高清超广角红外镜头，支持智能人形侦测与声光双重报警。免布线自动对码连接，通电即可监控，支持手机APP随时随地远程看店与查看回放。</p>
+      <p>400万高清超广角红外镜头，支持智能人形侦测与声光双重报警。</p>
     `,
     specifications: [
       { name: '分辨率', value: '2560 * 1440 (400W像素)' },
@@ -586,7 +578,7 @@ export const productsDb: ProductDetailItem[] = [
     },
     description: `
       <h3>高纯精炼 · 稳定基料</h3>
-      <p>严格精馏纯化生产，成品纯度稳定控制在99.9%以上，水分及杂质含量低，提供桶装、IBC吨罐和槽罐车配送多种起运方式，资质完备，安全直达。</p>
+      <p>严格精馏纯化生产，成品纯度稳定控制在99.9%以上。</p>
     `,
     specifications: [
       { name: '纯度指数', value: '≥ 99.95%' },
@@ -637,7 +629,7 @@ export const productsDb: ProductDetailItem[] = [
     },
     description: `
       <h3>精选好麻 · 亲肤透气</h3>
-      <p>55%法国进口亚麻与45%精梳棉混纺，经过高密度活性防缩水整理，手感蓬松柔软，色彩高级儒雅，最适合高端服装定制与家居软装布艺设计。</p>
+      <p>55%法国进口亚麻与45%精梳棉混纺，高频活性印染。</p>
     `,
     specifications: [
       { name: '面料成分', value: '55% 亚麻 + 45% 精梳棉' },
@@ -688,7 +680,7 @@ export const productsDb: ProductDetailItem[] = [
     },
     description: `
       <h3>强力制动，安全同行</h3>
-      <p>采用合金铸铁材质及高精数控机床加工，摩擦表面具备防锈涂层。具备卓越的高温抗热衰退性能，能轻松应对重载下坡制动需求，确保行车安全。</p>
+      <p>采用合金铸铁材质及高精数控机床加工，摩擦表面具备防锈涂层。</p>
     `,
     specifications: [
       { name: '适配车型', value: '主流重卡/牵引车/自卸车' },
@@ -699,125 +691,265 @@ export const productsDb: ProductDetailItem[] = [
   },
 ]
 
-export const useProductDetail = () => {
-  const { id } = useParams()
-  const navigate = useNavigate()
+const defaultAddresses: Address[] = [
+  {
+    id: 1,
+    name: '张三 (演示分销商)',
+    phone: '13800138000',
+    province: '广东省',
+    city: '深圳市',
+    district: '南山区',
+    detail: '科技园南区深南大道10000号腾讯大厦',
+    postalCode: '518000',
+    isDefault: true,
+  },
+  {
+    id: 2,
+    name: '李四',
+    phone: '13900139000',
+    province: '上海市',
+    city: '上海市',
+    district: '浦东新区',
+    detail: '陆家嘴环路1000号恒生银行大厦',
+    postalCode: '200120',
+    isDefault: false,
+  },
+]
 
-  // 匹配商品，从 mockDb 中动态获取，找不到默认第 1 个
-  const product = mockDb.getProductById(id || '1') || mockDb.getProducts()[0]
+const defaultOrders: Order[] = [
+  {
+    key: '1',
+    orderNo: 'O202606230001',
+    supplierId: '1',
+    supplierName: '深圳市华强电子科技有限公司',
+    distributorId: 'distributor_demo',
+    distributorName: '张三 (演示分销商)',
+    amount: 4500.0,
+    status: '已发货',
+    createTime: '2026-06-23 10:15:30',
+    shippingDetails: {
+      carrier: '顺丰速运',
+      trackingNo: 'SF14285796300',
+      shippedTime: '2026-06-23 14:22:10',
+    },
+    address: '广东省 深圳市 南山区 科技园南区深南大道10000号腾讯大厦',
+    contact: '张三 (演示分销商)',
+    phone: '13800138000',
+    items: [
+      {
+        productId: '1',
+        name: '工业级电子元件批发 高品质芯片模块',
+        image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=600&h=600&fit=crop',
+        price: 45.0,
+        quantity: 100,
+        unit: '件',
+        spec: { color: '深空灰', version: '工业增强版' },
+      },
+    ],
+  },
+  {
+    key: '2',
+    orderNo: 'O202606230002',
+    supplierId: '2',
+    supplierName: '广州精工办公家具有限公司',
+    distributorId: 'distributor_demo',
+    distributorName: '张三 (演示分销商)',
+    amount: 1800.0,
+    status: '待发货',
+    createTime: '2026-06-23 11:30:15',
+    address: '广东省 深圳市 南山区 科技园南区深南大道10000号腾讯大厦',
+    contact: '张三 (演示分销商)',
+    phone: '13800138000',
+    items: [
+      {
+        productId: '2',
+        name: '高品质办公家具套装 实木会议桌椅组合',
+        image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=600&h=600&fit=crop',
+        price: 1800.0,
+        quantity: 1,
+        unit: '套',
+        spec: { color: '北美黑胡桃色', size: '1.8米会议桌+6椅' },
+      },
+    ],
+  },
+]
 
-  const [quantity, setQuantity] = useState(product.priceLevels[0].minQuantity)
-  const [selectedSpec, setSelectedSpec] = useState<{ [key: string]: string }>({})
-  const [currentImage, setCurrentImage] = useState(0)
-  const [isFav, setIsFav] = useState(false)
+// 初始化数据
+export const initMockDb = () => {
+  if (!localStorage.getItem(KEYS.PRODUCTS)) {
+    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(defaultProducts))
+  }
+  if (!localStorage.getItem(KEYS.ADDRESSES)) {
+    localStorage.setItem(KEYS.ADDRESSES, JSON.stringify(defaultAddresses))
+  }
+  if (!localStorage.getItem(KEYS.ORDERS)) {
+    localStorage.setItem(KEYS.ORDERS, JSON.stringify(defaultOrders))
+  }
+  if (!localStorage.getItem(KEYS.FAVORITES)) {
+    localStorage.setItem(KEYS.FAVORITES, JSON.stringify([]))
+  }
+}
 
-  // 商品发生改变时，重置各状态，并更新收藏状态
-  useEffect(() => {
-    if (product) {
-      setQuantity(product.priceLevels[0].minQuantity)
-      setCurrentImage(0)
-      setIsFav(mockDb.isFavorite(product.id))
-      // 默认选择第一个规格
-      const defaultSpec: { [key: string]: string } = {}
-      Object.entries(product.specs).forEach(([key, values]) => {
-        if (values && values.length > 0) {
-          defaultSpec[key] = values[0]
+// 统一数据通知机制
+const notifyCartUpdated = () => {
+  window.dispatchEvent(new Event('cart_updated'))
+}
+
+const notifyDbUpdated = () => {
+  window.dispatchEvent(new Event('b2b_db_updated'))
+}
+
+// --- API 实现 ---
+
+export const mockDb = {
+  // --- 商品 Products ---
+  getProducts: (): ProductDetailItem[] => {
+    initMockDb()
+    return JSON.parse(localStorage.getItem(KEYS.PRODUCTS) || '[]')
+  },
+
+  getProductById: (id: string): ProductDetailItem | null => {
+    const list = mockDb.getProducts()
+    return list.find((p) => p.id === id) || null
+  },
+
+  saveProduct: (product: ProductDetailItem) => {
+    const list = mockDb.getProducts()
+    const index = list.findIndex((p) => p.id === product.id)
+    if (index > -1) {
+      list[index] = product
+    } else {
+      list.unshift(product)
+    }
+    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(list))
+    notifyDbUpdated()
+  },
+
+  deleteProduct: (id: string) => {
+    const list = mockDb.getProducts()
+    const filtered = list.filter((p) => p.id !== id)
+    localStorage.setItem(KEYS.PRODUCTS, JSON.stringify(filtered))
+    notifyDbUpdated()
+  },
+
+  // --- 订单 Orders ---
+  getOrders: (): Order[] => {
+    initMockDb()
+    return JSON.parse(localStorage.getItem(KEYS.ORDERS) || '[]')
+  },
+
+  saveOrder: (order: Order) => {
+    const list = mockDb.getOrders()
+    const index = list.findIndex((o) => o.orderNo === order.orderNo)
+    if (index > -1) {
+      list[index] = order
+    } else {
+      list.unshift(order)
+    }
+    localStorage.setItem(KEYS.ORDERS, JSON.stringify(list))
+    notifyDbUpdated()
+  },
+
+  updateOrderStatus: (orderNo: string, status: Order['status'], shippingDetails?: Order['shippingDetails']) => {
+    const list = mockDb.getOrders()
+    const index = list.findIndex((o) => o.orderNo === orderNo)
+    if (index > -1) {
+      list[index].status = status
+      if (shippingDetails) {
+        list[index].shippingDetails = {
+          ...list[index].shippingDetails,
+          ...shippingDetails,
         }
-      })
-      setSelectedSpec(defaultSpec)
-    }
-  }, [product])
-
-  // 监听数据库变化，实时更新收藏状态
-  useEffect(() => {
-    const handleDbUpdate = () => {
-      if (product) {
-        setIsFav(mockDb.isFavorite(product.id))
       }
+      localStorage.setItem(KEYS.ORDERS, JSON.stringify(list))
+      notifyDbUpdated()
+      return true
     }
-    window.addEventListener('b2b_db_updated', handleDbUpdate)
-    return () => {
-      window.removeEventListener('b2b_db_updated', handleDbUpdate)
-    }
-  }, [product])
+    return false
+  },
 
-  // 计算当前价格
-  const getCurrentPrice = () => {
-    const level = product.priceLevels.find(
-      (l) => quantity >= l.minQuantity && (l.maxQuantity === null || quantity <= l.maxQuantity)
-    )
-    return level ? level.price : product.priceLevels[0].price
-  }
+  // --- 收货地址 Addresses ---
+  getAddresses: (): Address[] => {
+    initMockDb()
+    return JSON.parse(localStorage.getItem(KEYS.ADDRESSES) || '[]')
+  },
 
-  const handleAddToCart = () => {
-    const cartList = mockDb.getCart()
-    const currentPrice = getCurrentPrice()
-    const cartItemId = `${product.id}-${Object.values(selectedSpec).join('-')}`
-    const existingIndex = cartList.findIndex((item: any) => item.cartItemId === cartItemId)
-
-    if (existingIndex > -1) {
-      cartList[existingIndex].quantity += quantity
-      cartList[existingIndex].price = currentPrice
-      cartList[existingIndex].spec = selectedSpec
-    } else {
-      cartList.push({
-        key: cartItemId,
-        cartItemId: cartItemId,
-        id: product.id,
-        image: product.images[0],
-        name: product.name,
-        price: currentPrice,
-        quantity: quantity,
-        unit: product.unit,
-        spec: selectedSpec,
+  saveAddress: (address: Address) => {
+    const list = mockDb.getAddresses()
+    // 如果设置为默认，先把其它地址的默认标志去掉
+    if (address.isDefault) {
+      list.forEach((addr) => {
+        addr.isDefault = false
       })
     }
-
-    mockDb.updateCartItems(cartList)
-    message.success(`成功加入购物车！采购数量: ${quantity} ${product.unit}`)
-  }
-
-  const handleBuyNow = () => {
-    handleAddToCart()
-    navigate('/cart')
-  }
-
-  const handleToggleFavorite = () => {
-    const added = mockDb.toggleFavorite(product.id)
-    setIsFav(added)
-    if (added) {
-      message.success('已加入收藏夹')
+    const index = list.findIndex((addr) => addr.id === address.id)
+    if (index > -1) {
+      list[index] = address
     } else {
-      message.success('已取消收藏')
+      list.push(address)
     }
-  }
+    localStorage.setItem(KEYS.ADDRESSES, JSON.stringify(list))
+    notifyDbUpdated()
+  },
 
-  const handleContactSupplier = () => {
-    // 触发全局客服弹窗事件
-    const contactEvent = new CustomEvent('open_chat_widget', {
-      detail: {
-        supplierName: product.supplier.name,
-        productName: product.name,
-        productId: product.id,
-      }
+  deleteAddress: (id: number) => {
+    const list = mockDb.getAddresses()
+    const filtered = list.filter((addr) => addr.id !== id)
+    // 如果删除了默认地址，把第一个地址设为默认
+    if (filtered.length > 0 && !filtered.some((addr) => addr.isDefault)) {
+      filtered[0].isDefault = true
+    }
+    localStorage.setItem(KEYS.ADDRESSES, JSON.stringify(filtered))
+    notifyDbUpdated()
+  },
+
+  setDefaultAddress: (id: number) => {
+    const list = mockDb.getAddresses()
+    list.forEach((addr) => {
+      addr.isDefault = addr.id === id
     })
-    window.dispatchEvent(contactEvent)
-  }
+    localStorage.setItem(KEYS.ADDRESSES, JSON.stringify(list))
+    notifyDbUpdated()
+  },
 
-  return {
-    product,
-    quantity,
-    setQuantity,
-    selectedSpec,
-    setSelectedSpec,
-    currentImage,
-    setCurrentImage,
-    getCurrentPrice,
-    handleAddToCart,
-    handleBuyNow,
-    handleContactSupplier,
-    isFav,
-    handleToggleFavorite,
-    navigate,
+  // --- 收藏夹 Favorites ---
+  getFavorites: (): string[] => {
+    initMockDb()
+    return JSON.parse(localStorage.getItem(KEYS.FAVORITES) || '[]')
+  },
+
+  isFavorite: (productId: string): boolean => {
+    const list = mockDb.getFavorites()
+    return list.includes(productId)
+  },
+
+  toggleFavorite: (productId: string): boolean => {
+    const list = mockDb.getFavorites()
+    const index = list.indexOf(productId)
+    let added = false
+    if (index > -1) {
+      list.splice(index, 1)
+    } else {
+      list.push(productId)
+      added = true
+    }
+    localStorage.setItem(KEYS.FAVORITES, JSON.stringify(list))
+    notifyDbUpdated()
+    return added
+  },
+
+  // --- 购物车 Cart ---
+  getCart: () => {
+    return JSON.parse(localStorage.getItem(KEYS.CART) || '[]')
+  },
+
+  clearCart: () => {
+    localStorage.setItem(KEYS.CART, JSON.stringify([]))
+    notifyCartUpdated()
+  },
+
+  updateCartItems: (items: any[]) => {
+    localStorage.setItem(KEYS.CART, JSON.stringify(items))
+    notifyCartUpdated()
   }
 }

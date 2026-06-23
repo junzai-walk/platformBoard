@@ -68,6 +68,68 @@ const categoryData = [
   },
 ]
 
+// 省市区发货地数据
+const areaData = [
+  {
+    value: '广东省',
+    label: '广东省',
+    children: [
+      {
+        value: '深圳市',
+        label: '深圳市',
+        children: [
+          { value: '南山区', label: '南山区' },
+          { value: '福田区', label: '福田区' },
+          { value: '宝安区', label: '宝安区' },
+        ],
+      },
+      {
+        value: '广州市',
+        label: '广州市',
+        children: [
+          { value: '天河区', label: '天河区' },
+          { value: '越秀区', label: '越秀区' },
+        ],
+      },
+    ],
+  },
+  {
+    value: '上海市',
+    label: '上海市',
+    children: [
+      {
+        value: '上海市',
+        label: '上海市',
+        children: [
+          { value: '浦东新区', label: '浦东新区' },
+          { value: '黄浦区', label: '黄浦区' },
+        ],
+      },
+    ],
+  },
+  {
+    value: '浙江省',
+    label: '浙江省',
+    children: [
+      {
+        value: '杭州市',
+        label: '杭州市',
+        children: [
+          { value: '西湖区', label: '西湖区' },
+          { value: '滨江区', label: '滨江区' },
+        ],
+      },
+      {
+        value: '宁波市',
+        label: '宁波市',
+        children: [
+          { value: '海曙区', label: '海曙区' },
+        ],
+      },
+    ],
+  },
+]
+
 const ProductForm = ({ initialValues, onSubmit, onCancel }: any) => {
   const [form] = Form.useForm()
   const [fileList, setFileList] = useState<UploadFile[]>([])
@@ -326,7 +388,7 @@ const ProductForm = ({ initialValues, onSubmit, onCancel }: any) => {
                 rules={[{ required: true, message: '请选择发货地' }]}
               >
                 <Cascader
-                  options={categoryData}
+                  options={areaData}
                   placeholder="请选择发货地（省/市/区）"
                 />
               </Form.Item>

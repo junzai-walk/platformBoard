@@ -1,7 +1,8 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Table, Button, Space, Tag, Modal, Form, Input, Cascader, message, Card } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, StarOutlined, StarFilled } from '@ant-design/icons'
 import AdminLayout, { distributorMenuItems } from '@/components/AdminLayout'
+import { mockDb } from '@/utils/mockDb'
 
 interface Address {
   id: number
@@ -87,41 +88,19 @@ const areaData = [
 ]
 
 const DistributorAdminAddresses = () => {
-  const [addresses, setAddresses] = useState<Address[]>([
-    {
-      id: 1,
-      name: '张三',
-      phone: '13800138000',
-      province: '广东省',
-      city: '深圳市',
-      district: '南山区',
-      detail: '科技园南区深南大道10000号',
-      postalCode: '518000',
-      isDefault: true,
-    },
-    {
-      id: 2,
-      name: '李四',
-      phone: '13900139000',
-      province: '上海市',
-      city: '上海市',
-      district: '浦东新区',
-      detail: '陆家嘴环路1000号',
-      postalCode: '200120',
-      isDefault: false,
-    },
-    {
-      id: 3,
-      name: '王五',
-      phone: '13700137000',
-      province: '北京市',
-      city: '北京市',
-      district: '朝阳区',
-      detail: '建国路88号SOHO现代城',
-      postalCode: '100020',
-      isDefault: false,
-    },
-  ])
+  const [addresses, setAddresses] = useState<Address[]>([])
+
+  const loadAddresses = () => {
+    setAddresses(mockDb.getAddresses())
+  }
+
+  useEffect(() => {
+    loadAddresses()
+    window.addEventListener('b2b_db_updated', loadAddresses)
+    return () => {
+      window.removeEventListener('b2b_db_updated', loadAddresses)
+    }
+  }, [])
 
   const [isModalVisible, setIsModalVisible] = useState(false)
   const [editingAddress, setEditingAddress] = useState<Address | null>(null)
@@ -152,19 +131,16 @@ const DistributorAdminAddresses = () => {
       okText: '确定',
       cancelText: '取消',
       onOk: () => {
-        setAddresses(addresses.filter((addr) => addr.id !== id))
+        mockDb.deleteAddress(id)
+        loadAddresses()
         message.success('删除成功')
       },
     })
   }
 
   const handleSetDefault = (id: number) => {
-    setAddresses(
-      addresses.map((addr) => ({
-        ...addr,
-        isDefault: addr.id === id,
-      }))
-    )
+    mockDb.setDefaultAddress(id)
+    loadAddresses()
     message.success('已设置为默认地址')
   }
 
@@ -183,13 +159,9 @@ const DistributorAdminAddresses = () => {
         isDefault: editingAddress?.isDefault || false,
       }
 
-      if (editingAddress) {
-        setAddresses(addresses.map((addr) => (addr.id === editingAddress.id ? newAddress : addr)))
-        message.success('修改成功')
-      } else {
-        setAddresses([...addresses, newAddress])
-        message.success('添加成功')
-      }
+      mockDb.saveAddress(newAddress)
+      loadAddresses()
+      message.success(editingAddress ? '修改成功' : '添加成功')
 
       setIsModalVisible(false)
       form.resetFields()

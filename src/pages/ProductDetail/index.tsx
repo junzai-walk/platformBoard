@@ -21,6 +21,7 @@ import {
   SafetyCertificateOutlined,
   TruckOutlined,
   HeartOutlined,
+  HeartFilled,
   ShareAltOutlined,
   PhoneOutlined,
   GiftOutlined,
@@ -42,6 +43,8 @@ const ProductDetail = () => {
     handleAddToCart,
     handleBuyNow,
     handleContactSupplier,
+    isFav,
+    handleToggleFavorite,
     navigate,
   } = useProductDetail()
 
@@ -255,8 +258,12 @@ const ProductDetail = () => {
                     <Button size="large" onClick={handleBuyNow} style={{ flex: 1 }}>
                       立即订购
                     </Button>
-                    <Button icon={<HeartOutlined />} size="large">
-                      收藏
+                    <Button 
+                      icon={isFav ? <HeartFilled style={{ color: '#ff4d4f' }} /> : <HeartOutlined />} 
+                      size="large"
+                      onClick={handleToggleFavorite}
+                    >
+                      {isFav ? '已收藏' : '收藏'}
                     </Button>
                     <Button icon={<ShareAltOutlined />} size="large">
                       分享

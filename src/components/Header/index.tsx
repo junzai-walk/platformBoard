@@ -11,9 +11,11 @@ import {
   LogoutOutlined,
   DashboardOutlined,
   SettingOutlined,
+  DeleteOutlined,
 } from '@ant-design/icons'
 import type { MenuProps } from 'antd'
 import { useAuth } from '../../contexts/AuthContext'
+import { mockDb } from '../../utils/mockDb'
 import './index.less'
 
 // Removed deprecated Input.Search in favor of Space.Compact
@@ -23,46 +25,91 @@ const Header = () => {
   const navigate = useNavigate()
   const [searchText, setSearchText] = useState('')
   
-  const [cartCount, setCartCount] = useState(() => {
-    const STORAGE_KEY = 'b2b_cart_items'
-    const stored = localStorage.getItem(STORAGE_KEY)
-    if (stored) {
-      try {
-        const list = JSON.parse(stored)
-        return list.reduce((sum: number, item: any) => sum + item.quantity, 0)
-      } catch (e) {
-        console.error(e)
-      }
-    }
-    return 0
-  })
+  const [cartItems, setCartItems] = useState<any[]>([])
+  const [cartCount, setCartCount] = useState(0)
 
   useEffect(() => {
-    const updateCount = () => {
-      const STORAGE_KEY = 'b2b_cart_items'
-      const stored = localStorage.getItem(STORAGE_KEY)
-      if (stored) {
-        try {
-          const list = JSON.parse(stored)
-          const count = list.reduce((sum: number, item: any) => sum + item.quantity, 0)
-          setCartCount(count)
-          return
-        } catch (e) {
-          console.error(e)
-        }
-      }
-      setCartCount(0)
+    const updateCart = () => {
+      const items = mockDb.getCart()
+      setCartItems(items)
+      const count = items.reduce((sum: number, item: any) => sum + item.quantity, 0)
+      setCartCount(count)
     }
 
-    updateCount()
+    updateCart()
 
-    window.addEventListener('storage', updateCount)
-    window.addEventListener('cart_updated', updateCount)
+    window.addEventListener('storage', updateCart)
+    window.addEventListener('cart_updated', updateCart)
     return () => {
-      window.removeEventListener('storage', updateCount)
-      window.removeEventListener('cart_updated', updateCount)
+      window.removeEventListener('storage', updateCart)
+      window.removeEventListener('cart_updated', updateCart)
     }
   }, [])
+
+  const handleRemoveFromMiniCart = (key: string) => {
+    const updated = cartItems.filter(item => item.key !== key)
+    mockDb.updateCartItems(updated)
+    message.success('已从购物车中删除')
+  }
+
+  const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0)
+
+  const miniCartMenu = (
+    <div className="mini-cart-dropdown">
+      {cartItems.length === 0 ? (
+        <div className="mini-cart-empty">购物车空空如也，快去采购吧！</div>
+      ) : (
+        <>
+          <div className="mini-cart-list">
+            {cartItems.slice(0, 5).map((item) => (
+              <div className="mini-cart-item" key={item.key}>
+                <img src={item.image} alt={item.name} style={{ width: 40, height: 40, borderRadius: 4, objectFit: 'cover' }} />
+                <div className="item-detail" style={{ flex: 1, minWidth: 0, padding: '0 8px' }}>
+                  <div className="item-name" style={{ fontSize: 12, fontWeight: 500, color: '#333', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    {item.name}
+                  </div>
+                  {item.spec && Object.keys(item.spec).length > 0 && (
+                    <div className="item-spec" style={{ fontSize: 10, color: '#999' }}>
+                      {Object.entries(item.spec).map(([_, v]) => `${v}`).join(' / ')}
+                    </div>
+                  )}
+                  <div className="item-meta" style={{ fontSize: 11, marginTop: 2 }}>
+                    <span className="item-price" style={{ color: '#ff6600', fontWeight: 600 }}>¥{item.price.toFixed(2)}</span>
+                    <span className="item-qty" style={{ color: '#888' }}> x {item.quantity}</span>
+                  </div>
+                </div>
+                <Button
+                  type="text"
+                  danger
+                  size="small"
+                  icon={<DeleteOutlined />}
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    e.preventDefault()
+                    handleRemoveFromMiniCart(item.key)
+                  }}
+                />
+              </div>
+            ))}
+            {cartItems.length > 5 && (
+              <div className="mini-cart-more" style={{ padding: '8px 12px', fontSize: 12, color: '#999', textAlign: 'center' }}>
+                还有 {cartItems.length - 5} 件商品...
+              </div>
+            )}
+          </div>
+          <div className="mini-cart-footer" style={{ padding: 12, borderTop: '1px solid #f0f0f0', background: '#fafafa', borderRadius: '0 0 8px 8px' }}>
+            <div className="mini-cart-total" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, fontSize: 13 }}>
+              <span style={{ color: '#666' }}>总计金额：</span>
+              <span className="total-amount" style={{ color: '#ff6600', fontWeight: 600 }}>¥{totalPrice.toFixed(2)}</span>
+            </div>
+            <Button type="primary" block onClick={() => navigate('/cart')} style={{ background: '#ff6600', borderColor: '#ff6600', height: 32, fontSize: 12 }}>
+              前往购物车结算
+            </Button>
+          </div>
+        </>
+      )}
+    </div>
+  )
 
   const { isAuthenticated, user, logout } = useAuth()
 
@@ -197,11 +244,13 @@ const Header = () => {
 
             <div className="header-actions">
               <Space size="large">
-                <Link to="/cart">
-                  <Badge count={cartCount} offset={[10, 0]}>
-                    <ShoppingCartOutlined style={{ fontSize: 24 }} />
-                  </Badge>
-                </Link>
+                <Dropdown dropdownRender={() => miniCartMenu} placement="bottomRight">
+                  <Link to="/cart">
+                    <Badge count={cartCount} offset={[10, 0]}>
+                      <ShoppingCartOutlined style={{ fontSize: 24 }} />
+                    </Badge>
+                  </Link>
+                </Dropdown>
 
                 {isAuthenticated && user ? (
                   // 已登录状态

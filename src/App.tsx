@@ -34,6 +34,9 @@ import HelpCenter from './pages/HelpCenter'
 import OverseasWarehouse from './pages/OverseasWarehouse'
 import LogisticsSolutions from './pages/LogisticsSolutions'
 
+import RoleSwitcher from './components/RoleSwitcher'
+import ChatWidget from './components/ChatWidget'
+
 function App() {
   return (
     <AuthProvider>
@@ -177,6 +180,8 @@ function App() {
           <Route path="/contact-us" element={<ContactUs />} />
           <Route path="/help-center" element={<HelpCenter />} />
         </Routes>
+        <RoleSwitcher />
+        <ChatWidget />
       </Router>
     </AuthProvider>
   )

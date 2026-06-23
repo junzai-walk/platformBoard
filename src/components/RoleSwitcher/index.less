@@ -1,0 +1,95 @@
+.role-switcher-container {
+  position: fixed;
+  left: 24px;
+  bottom: 24px;
+  z-index: 1000;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+
+  .switcher-trigger-btn {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+
+    &:hover {
+      transform: scale(1.1);
+    }
+  }
+
+  .switcher-panel {
+    width: 240px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    padding: 16px;
+    animation: slideUp 0.3s ease;
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+      padding-bottom: 8px;
+
+      h4 {
+        margin: 0;
+        font-size: 14px;
+        color: #333;
+        font-weight: 600;
+      }
+
+      .close-btn {
+        cursor: pointer;
+        color: #999;
+        font-size: 18px;
+        line-height: 1;
+        transition: color 0.2s;
+
+        &:hover {
+          color: #333;
+        }
+      }
+    }
+
+    .panel-body {
+      .current-status {
+        margin-bottom: 16px;
+        font-size: 13px;
+        color: #666;
+
+        .user-name {
+          margin-top: 4px;
+          font-weight: 500;
+          color: #111;
+        }
+      }
+
+      .action-buttons {
+        button {
+          height: 36px;
+          border-radius: 6px;
+          font-size: 13px;
+        }
+      }
+    }
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -11,6 +11,7 @@ import {
   CheckCircleOutlined,
   HomeOutlined,
 } from '@ant-design/icons'
+import { mockDb } from '../utils/mockDb'
 
 export const useHome = () => {
   const { t } = useTranslation()
@@ -302,141 +303,23 @@ export const useHome = () => {
     },
   ]
 
-  // 12个热门商品
-  const hotProducts = [
-    {
-      id: 1,
-      name: '工业级电子元件批发',
-      image: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=300&h=300&fit=crop',
-      price: '¥10.00 - ¥50.00',
-      moq: '100件',
-      sales: 15680,
-      supplier: '深圳华强电子',
-      certified: true,
-      tags: ['热销', '认证'],
-    },
-    {
-      id: 2,
-      name: '高品质办公家具套装',
-      image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=300&h=300&fit=crop',
-      price: '¥500.00 - ¥2000.00',
-      moq: '10套',
-      sales: 8920,
-      supplier: '广州精工家具',
-      certified: true,
-      tags: ['新品', '认证'],
-    },
-    {
-      id: 3,
-      name: '环保包装材料',
-      image: 'https://images.unsplash.com/photo-1566576721346-d4a3b4eaeb55?w=300&h=300&fit=crop',
-      price: '¥2.00 - ¥8.00',
-      moq: '1000个',
-      sales: 23450,
-      supplier: '上海绿源包装',
-      certified: true,
-      tags: ['热销', '环保'],
-    },
-    {
-      id: 4,
-      name: '智能穿戴设备',
-      image: 'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop',
-      price: '¥80.00 - ¥300.00',
-      moq: '50件',
-      sales: 12300,
-      supplier: '北京智联科技',
-      certified: true,
-      tags: ['新品', '智能'],
-    },
-    {
-      id: 5,
-      name: '工业级LED照明灯具',
-      image: 'https://images.unsplash.com/photo-1513506003901-1e6a229e2d15?w=300&h=300&fit=crop',
-      price: '¥35.00 - ¥120.00',
-      moq: '200件',
-      sales: 9870,
-      supplier: '佛山光明电器',
-      certified: true,
-      tags: ['节能', '认证'],
-    },
-    {
-      id: 6,
-      name: '精密五金工具套装',
-      image: 'https://images.unsplash.com/photo-1530124566582-a618bc2615dc?w=300&h=300&fit=crop',
-      price: '¥150.00 - ¥680.00',
-      moq: '20套',
-      sales: 6540,
-      supplier: '温州精工五金',
-      certified: true,
-      tags: ['热销', '精品'],
-    },
-    {
-      id: 7,
-      name: '高强度建筑钢材',
-      image: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=300&h=300&fit=crop',
-      price: '¥3500.00 - ¥4200.00',
-      moq: '10吨',
-      sales: 4320,
-      supplier: '鞍山钢铁集团',
-      certified: true,
-      tags: ['认证', '质保'],
-    },
-    {
-      id: 8,
-      name: '医用防护用品',
-      image: 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=300&h=300&fit=crop',
-      price: '¥1.50 - ¥8.00',
-      moq: '5000件',
-      sales: 18900,
-      supplier: '江苏医疗器械',
-      certified: true,
-      tags: ['医用', '认证'],
-    },
-    {
-      id: 9,
-      name: '智能安防监控系统',
-      image: 'https://images.unsplash.com/photo-1557597774-9d273605dfa9?w=300&h=300&fit=crop',
-      price: '¥280.00 - ¥1200.00',
-      moq: '10套',
-      sales: 7650,
-      supplier: '杭州安防科技',
-      certified: true,
-      tags: ['智能', '新品'],
-    },
-    {
-      id: 10,
-      name: '环保化工原料',
-      image: 'https://images.unsplash.com/photo-1532187863486-abf9dbad1b69?w=300&h=300&fit=crop',
-      price: '¥45.00 - ¥180.00',
-      moq: '500kg',
-      sales: 5430,
-      supplier: '宁波化工集团',
-      certified: true,
-      tags: ['环保', '认证'],
-    },
-    {
-      id: 11,
-      name: '高端纺织面料',
-      image: 'https://images.unsplash.com/photo-1544816155-12df9643f363?w=300&h=300&fit=crop',
-      price: '¥25.00 - ¥95.00',
-      moq: '1000米',
-      sales: 11200,
-      supplier: '苏州丝绸集团',
-      certified: true,
-      tags: ['精品', '热销'],
-    },
-    {
-      id: 12,
-      name: '汽车配件批发',
-      image: 'https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=300&h=300&fit=crop',
-      price: '¥120.00 - ¥850.00',
-      moq: '50件',
-      sales: 9340,
-      supplier: '重庆汽配城',
-      certified: true,
-      tags: ['认证', '质保'],
-    },
-  ]
+  // 动态读取本地 mockDb
+  const dbProducts = mockDb.getProducts()
+  const hotProducts = dbProducts
+    .filter((p) => !p.tags.includes('已下架'))
+    .map((p) => ({
+      id: p.id,
+      name: p.name,
+      image: p.images[0],
+      price: p.priceLevels.length > 1
+        ? `¥${p.priceLevels[p.priceLevels.length - 1].price.toFixed(2)} - ¥${p.priceLevels[0].price.toFixed(2)}`
+        : `¥${p.priceLevels[0].price.toFixed(2)}`,
+      moq: `${p.priceLevels[0].minQuantity} ${p.unit}`,
+      sales: p.sales,
+      supplier: p.supplier.name,
+      certified: p.supplier.certified,
+      tags: p.tags,
+    }))
 
   return {
     largeItemCategories,

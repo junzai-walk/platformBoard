@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
+import { mockDb } from '../utils/mockDb'
 
 export interface ProductItem {
-  id: number
+  id: string
   name: string
   image: string
   price: string
@@ -11,24 +12,10 @@ export interface ProductItem {
   tags: string[]
 }
 
-const productImages = [
-  'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1560343090-f0409e92791a?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?w=300&h=300&fit=crop',
-  'https://images.unsplash.com/photo-1593642532400-2682810df593?w=300&h=300&fit=crop',
-]
-
 export const useCategoryProducts = () => {
   const [viewMode, setViewMode] = useState<'masonry' | 'grid' | 'list'>('masonry')
   const [columnsCount, setColumnsCount] = useState(3)
+  const [products, setProducts] = useState<ProductItem[]>([])
 
   useEffect(() => {
     const updateColumns = () => {
@@ -42,18 +29,37 @@ export const useCategoryProducts = () => {
     return () => window.removeEventListener('resize', updateColumns)
   }, [])
 
-  const products: ProductItem[] = Array(12).fill(null).map((_, i) => ({
-    id: i + 1,
-    name: `高端优质 B2B 商品 ${i + 1}`,
-    image: productImages[i],
-    price: `¥${((i + 1) * 15).toFixed(2)} - ¥${((i + 1) * 45).toFixed(2)}`,
-    moq: `${(i + 1) * 50}件`,
-    sales: 1200 + i * 350,
-    description: i % 2 === 0 
-      ? '该产品支持大批量采购，由实力厂家直接发货，品质层层把关，售后有保障。'
-      : '精选优质原材料，融合现代工艺制作，符合多项国际标准，是您采购的最佳选择。',
-    tags: i % 3 === 0 ? ['实力商家', '免邮送达'] : (i % 3 === 1 ? ['极速发货'] : ['海外仓直邮', '限时特惠'])
-  }))
+  const loadProducts = () => {
+    const dbProducts = mockDb.getProducts().filter((p) => !p.tags.includes('已下架'))
+    const list: ProductItem[] = dbProducts.map((p) => {
+      // 提取 HTML 文本内容
+      const cleanDesc = p.description
+        ? p.description.replace(/<\/?[^>]+(>|$)/g, '').trim()
+        : '该商品支持大批量采购，由实力厂家直接发货，品质层层把关，售后有保障。'
+      
+      return {
+        id: p.id,
+        name: p.name,
+        image: p.images[0],
+        price: p.priceLevels.length > 1
+          ? `¥${p.priceLevels[p.priceLevels.length - 1].price.toFixed(2)} - ¥${p.priceLevels[0].price.toFixed(2)}`
+          : `¥${p.priceLevels[0].price.toFixed(2)}`,
+        moq: `${p.priceLevels[0].minQuantity} ${p.unit}`,
+        sales: p.sales,
+        description: cleanDesc.substring(0, 60) + (cleanDesc.length > 60 ? '...' : ''),
+        tags: p.tags,
+      }
+    })
+    setProducts(list)
+  }
+
+  useEffect(() => {
+    loadProducts()
+    window.addEventListener('b2b_db_updated', loadProducts)
+    return () => {
+      window.removeEventListener('b2b_db_updated', loadProducts)
+    }
+  }, [])
 
   // Distribute items to columns left-to-right (round-robin)
   const columns = Array.from({ length: columnsCount }, (): ProductItem[] => [])
@@ -61,9 +67,10 @@ export const useCategoryProducts = () => {
     columns[index % columnsCount].push(product)
   })
 
-  const getImageHeight = (id: number) => {
-    const heights = [200, 270, 190, 310, 230, 260]
-    return heights[id % heights.length]
+  const getImageHeight = (id: string) => {
+    const heights = [220, 280, 200, 320, 240, 260]
+    const charSum = id.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0)
+    return heights[charSum % heights.length]
   }
 
   return {

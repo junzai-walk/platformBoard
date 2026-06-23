@@ -1,49 +1,37 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Button, Table, Tag, Space, Modal, message, Card, Image, Input, Select } from 'antd'
 import { PlusOutlined, EditOutlined, DeleteOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import { useNavigate } from 'react-router-dom'
 import AdminLayout, { supplierMenuItems } from '@/components/AdminLayout'
+import { mockDb } from '@/utils/mockDb'
+import { useAuth } from '@/contexts/AuthContext'
+import { ProductDetailItem } from '@/hooks/useProductDetail'
 
 const { Search } = Input
 const { Option } = Select
 
-interface Product {
-  id: string
-  name: string
-  image: string
-  category: string
-  stock: number
-  price: string
-  sales: number
-  status: 'published' | 'draft' | 'soldout'
-}
-
 const SupplierAdminProducts = () => {
   const navigate = useNavigate()
-  const [products, setProducts] = useState<Product[]>(
-    Array(12)
-      .fill(null)
-      .map((_, i) => ({
-        id: `P${1000 + i}`,
-        name: `工业级${['电子元件', '机械设备', '五金工具', '办公用品'][i % 4]} ${i + 1}`,
-        image: `https://images.unsplash.com/photo-${
-          [
-            '1518770660439-4636190af475',
-            '1581092160562-40aa08e78837',
-            '1572635196237-14b3f281503f',
-            '1484480974693-6ca0a78fb36b',
-          ][i % 4]
-        }?w=100&h=100&fit=crop`,
-        category: ['电子元器件', '机械设备', '五金工具', '办公用品'][i % 4],
-        stock: Math.floor(Math.random() * 1000) + 100,
-        price: `¥${(Math.random() * 100 + 10).toFixed(2)}`,
-        sales: Math.floor(Math.random() * 5000),
-        status: ['published', 'draft', 'soldout'][i % 3] as 'published' | 'draft' | 'soldout',
-      }))
-  )
-
+  const { user } = useAuth()
+  const [products, setProducts] = useState<ProductDetailItem[]>([])
   const [searchText, setSearchText] = useState('')
   const [statusFilter, setStatusFilter] = useState<string>('all')
+
+  const loadProducts = () => {
+    const list = mockDb.getProducts()
+    // 过滤出属于当前登录供应商的商品
+    const supplierId = user?.id || '1'
+    const filtered = list.filter((p) => p.supplier.id === supplierId)
+    setProducts(filtered)
+  }
+
+  useEffect(() => {
+    loadProducts()
+    window.addEventListener('b2b_db_updated', loadProducts)
+    return () => {
+      window.removeEventListener('b2b_db_updated', loadProducts)
+    }
+  }, [user])
 
   const handleDelete = (id: string) => {
     Modal.confirm({
@@ -53,25 +41,39 @@ const SupplierAdminProducts = () => {
       cancelText: '取消',
       okType: 'danger',
       onOk: () => {
-        setProducts(products.filter((p) => p.id !== id))
+        mockDb.deleteProduct(id)
+        loadProducts()
         message.success('删除成功')
       },
     })
   }
 
-  const handleStatusChange = (id: string, newStatus: 'published' | 'draft' | 'soldout') => {
-    setProducts(products.map((p) => (p.id === id ? { ...p, status: newStatus } : p)))
-    message.success('状态更新成功')
+  const handleStatusToggle = (product: ProductDetailItem) => {
+    // 模拟上下架状态
+    // 在真实 mockDb 中，产品可以直接保存，我们可以利用 tags 中是否包含 '已下架' 来模拟
+    const hasSoldoutTag = product.tags.includes('已下架')
+    let newTags = [...product.tags]
+    if (hasSoldoutTag) {
+      newTags = newTags.filter((t) => t !== '已下架')
+      message.success('商品上架成功')
+    } else {
+      newTags.push('已下架')
+      message.success('商品下架成功')
+    }
+    
+    mockDb.saveProduct({
+      ...product,
+      tags: newTags,
+    })
+    loadProducts()
   }
 
-  const getStatusTag = (status: string) => {
-    const statusMap = {
-      published: { color: 'green', text: '出售中' },
-      draft: { color: 'default', text: '草稿' },
-      soldout: { color: 'red', text: '已售罄' },
+  const getStatusTag = (product: ProductDetailItem) => {
+    const isSoldout = product.tags.includes('已下架') || product.stock === 0
+    if (isSoldout) {
+      return <Tag color="red">已下架</Tag>
     }
-    const config = statusMap[status as keyof typeof statusMap]
-    return <Tag color={config.color}>{config.text}</Tag>
+    return <Tag color="green">出售中</Tag>
   }
 
   const columns = [
@@ -79,10 +81,10 @@ const SupplierAdminProducts = () => {
       title: '商品信息',
       key: 'info',
       width: 350,
-      render: (record: Product) => (
+      render: (record: ProductDetailItem) => (
         <Space>
           <Image
-            src={record.image}
+            src={record.images[0]}
             width={60}
             height={60}
             style={{ borderRadius: 8, objectFit: 'cover' }}
@@ -97,12 +99,14 @@ const SupplierAdminProducts = () => {
       ),
     },
     {
-      title: '价格',
-      dataIndex: 'price',
+      title: '起订价',
+      dataIndex: 'priceLevels',
       key: 'price',
       width: 120,
-      render: (price: string) => (
-        <span style={{ color: '#ff6600', fontWeight: 600, fontSize: 16 }}>{price}</span>
+      render: (priceLevels: any[]) => (
+        <span style={{ color: '#ff6600', fontWeight: 600, fontSize: 16 }}>
+          ¥{priceLevels[0].price.toFixed(2)}
+        </span>
       ),
     },
     {
@@ -122,63 +126,58 @@ const SupplierAdminProducts = () => {
     },
     {
       title: '状态',
-      dataIndex: 'status',
       key: 'status',
       width: 100,
-      render: (status: string) => getStatusTag(status),
+      render: (record: ProductDetailItem) => getStatusTag(record),
     },
     {
       title: '操作',
       key: 'action',
       width: 280,
-      render: (record: Product) => (
-        <Space>
-          <Button
-            type="link"
-            icon={<EyeOutlined />}
-            onClick={() => navigate(`/product/${record.id}`)}
-          >
-            查看
-          </Button>
-          <Button
-            type="link"
-            icon={<EditOutlined />}
-            onClick={() => navigate(`/supplier-admin/products/edit/${record.id}`)}
-          >
-            编辑
-          </Button>
-          {record.status === 'published' && (
+      render: (record: ProductDetailItem) => {
+        const isSoldout = record.tags.includes('已下架')
+        return (
+          <Space>
             <Button
               type="link"
-              onClick={() => handleStatusChange(record.id, 'soldout')}
+              icon={<EyeOutlined />}
+              onClick={() => navigate(`/product/${record.id}`)}
+              disabled={isSoldout}
             >
-              下架
+              查看
             </Button>
-          )}
-          {record.status !== 'published' && (
             <Button
               type="link"
-              onClick={() => handleStatusChange(record.id, 'published')}
+              icon={<EditOutlined />}
+              onClick={() => navigate(`/supplier-admin/products/edit/${record.id}`)}
             >
-              上架
+              编辑
             </Button>
-          )}
-          <Button
-            type="link"
-            danger
-            icon={<DeleteOutlined />}
-            onClick={() => handleDelete(record.id)}
-          >
-            删除
-          </Button>
-        </Space>
-      ),
+            <Button
+              type="link"
+              onClick={() => handleStatusToggle(record)}
+            >
+              {isSoldout ? '上架' : '下架'}
+            </Button>
+            <Button
+              type="link"
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => handleDelete(record.id)}
+            >
+              删除
+            </Button>
+          </Space>
+        )
+      },
     },
   ]
 
   const filteredProducts = products.filter((p) => {
     const matchSearch = p.name.toLowerCase().includes(searchText.toLowerCase()) || p.id.includes(searchText)
-    const matchStatus = statusFilter === 'all' || p.status === statusFilter
+    const isSoldout = p.tags.includes('已下架') || p.stock === 0
+    const currentStatus = isSoldout ? 'soldout' : 'published'
+    const matchStatus = statusFilter === 'all' || currentStatus === statusFilter
     return matchSearch && matchStatus
   })
 
@@ -218,8 +217,7 @@ const SupplierAdminProducts = () => {
             >
               <Option value="all">全部状态</Option>
               <Option value="published">出售中</Option>
-              <Option value="draft">草稿</Option>
-              <Option value="soldout">已售罄</Option>
+              <Option value="soldout">已下架</Option>
             </Select>
           </Space>
         </div>
@@ -240,4 +238,3 @@ const SupplierAdminProducts = () => {
 }
 
 export default SupplierAdminProducts
-

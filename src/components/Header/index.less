@@ -212,3 +212,42 @@
   }
 }
 
+// 迷你购物车下拉框样式
+.mini-cart-dropdown {
+  width: 340px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+  border: 1px solid #f0f0f0;
+  overflow: hidden;
+
+  .mini-cart-empty {
+    padding: 32px 16px;
+    text-align: center;
+    color: #999;
+    font-size: 13px;
+  }
+
+  .mini-cart-list {
+    max-height: 280px;
+    overflow-y: auto;
+
+    .mini-cart-item {
+      display: flex;
+      align-items: center;
+      padding: 10px 16px;
+      border-bottom: 1px dashed #f0f0f0;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #fafafa;
+      }
+
+      &:last-child {
+        border-bottom: none;
+      }
+    }
+  }
+}
+
+
